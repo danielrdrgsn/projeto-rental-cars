@@ -1,4 +1,4 @@
-public class Agencia {
+public abstract class Agencia {
 
     private int ID;
     private String nome;
