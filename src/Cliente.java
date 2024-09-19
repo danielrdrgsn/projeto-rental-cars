@@ -6,7 +6,7 @@ public class Cliente extends Usuario {
 
     @Override
     public void showMenu() {
-        System.out.println("\nMENU - CLIENTE");
+        System.out.println("\nMENU - CLIENTE"); // DANIEL
         System.out.println("\n1. Listar veículos");
         System.out.println("2. Alugar veículo");
         System.out.println("3. Meus aluguéis");
