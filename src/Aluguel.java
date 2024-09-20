@@ -153,11 +153,63 @@ public class Aluguel {
 
         if(!isAlugado){
             System.out.println("Não há veículos disponíveis!");
-        }
+
     }
 
+}
+
     private double calcularTotal(int horas, double valor) {
-        double result = horas*valor;
+        double result = valor*horas;
         return result;
+    }
+
+
+    public void alugarVeiculoParaPessoaJuridica(Cliente cliente, List<Veiculo> veiculos, List<Agencia> agencias, int horas){
+        boolean isAlugado = false;
+
+        for(int i=0; i < veiculos.size(); i++){
+            Veiculo veiculo = veiculos.get(i);
+
+            double descontoPessoaJuridica = 0.9;
+
+            if(veiculo.isDisponivel()){
+                this.usuario = usuario;
+
+                if(veiculo instanceof Carro){
+                    this.carro = (Carro) veiculo;
+                }else{
+                    this.carro = null;
+                }
+
+                if(veiculo instanceof Moto){
+                    this.moto = (Moto) veiculo;
+                }else{
+                    this.moto = null;
+                }
+
+                if(veiculo instanceof Caminhao){
+                    this.caminhao = (Caminhao) veiculo;
+                }else{
+                    this.caminhao = null;
+                }
+
+                if(!agencias.isEmpty()){
+                    this.agencia = agencias.get(0);
+                }
+
+                this.hora = horas;
+                this.total = calcularTotal(horas, veiculo.getValor()) * descontoPessoaJuridica;
+                this.status = "Alugado PJ";
+                veiculo.setDisponivel(false);
+                this.dateTime = LocalDateTime.now();
+                isAlugado = true;
+                break;
+
+            }
+        }
+
+        if(!isAlugado){
+            System.out.println("Não há veículos disponíveis!");
+        }
     }
 }
