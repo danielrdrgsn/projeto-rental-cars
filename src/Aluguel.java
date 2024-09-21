@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter;
 public class Aluguel {
 
     private int ID;
-    private Usuario usuario;
+    private Usuario1 usuario;
     private Carro carro;
     private Moto moto;
     private Caminhao caminhao;
@@ -27,11 +27,11 @@ public class Aluguel {
         this.ID = ID;
     }
 
-    public Usuario getUsuario() {
+    public Usuario1 getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(Usuario1 usuario) {
         this.usuario = usuario;
     }
 

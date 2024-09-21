@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 package Esboco;
 
-public class AdminMenu {
+public class Usuario {
     private static List<Agencia> agencias = new ArrayList<>();
     private static List<Cliente> clientes = new ArrayList<>();
     private static List<Aluguel> alugueis = new ArrayList<>();

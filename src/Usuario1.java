@@ -1,4 +1,4 @@
-public abstract class Usuario {
+public abstract class Usuario1 {
 
     private int ID;
     private String nome;
@@ -7,7 +7,7 @@ public abstract class Usuario {
     private String telefone;
     private String senha;
 
-    public Usuario() {
+    public Usuario1() {
     }
 
     public int getID() {

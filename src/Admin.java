@@ -1,4 +1,4 @@
-public class Admin extends Usuario {
+public class Admin extends Usuario1 {
 
     public Admin() {
         super();
