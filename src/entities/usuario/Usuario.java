@@ -4,7 +4,6 @@ import java.util.Objects;
 
 public abstract class Usuario implements Comparable<Usuario> {
 
-    private Integer id;
     private String nome;
     private String email; // ID
     protected TipoUsuario tipoUsuario;
