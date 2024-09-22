@@ -10,14 +10,24 @@ import entities.veiculo.Carro;
 import entities.veiculo.Moto;
 import entities.veiculo.Veiculo;
 import repositories.LocadoraBD;
+import utils.ConsoleColors;
+import utils.MenusUtils;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        Locadora locadora = new Locadora("Rent-A-Car");
+        Locadora locadora = new Locadora("* RENT-A-CAR *");
+        LocadoraBD.carregarDadosLocadora();
+
+        System.out.println(locadora.getNome());
+
+        MenusUtils.mostrarMenuPrincipal();
+
 
 //        LocadoraBD.salvarDadosLocadora(locadora);
 //
@@ -70,8 +80,6 @@ public class Main {
 //
 //        System.out.println("Dados da agência:");
 //        System.out.println(Locadora.getAgencias().get(0).mostrarAgencia());
-
-
-
     }
+
 }

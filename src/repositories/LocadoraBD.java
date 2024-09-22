@@ -17,35 +17,15 @@ public abstract class LocadoraBD {
         salvarDadosEmArquivo(Locadora.getVeiculos(), "veiculos.txt");
     }
 
-    public static void carregarUsuarios() throws IOException {
-        try {
-            Locadora.setUsuarios(carregarListaDeArquivo("usuarios.txt", Usuario.class));
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
-
-    public static void carregarAgencias() throws IOException {
-        try {
-            Locadora.setAgencias(carregarListaDeArquivo("agencias.txt", Agencia.class));
-        } catch (IOException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
-    }
-
-    public static void carregarVeiculos() throws IOException {
-        try {
-            Locadora.setVeiculos(carregarListaDeArquivo("veiculos.txt", Veiculo.class));
-        } catch (IOException ex) {
-            throw new RuntimeException(ex.getMessage());
-        }
+    public static void carregarDadosLocadora() throws IOException {
+        Locadora.setUsuarios(carregarListaDeArquivo("usuarios.txt", Usuario.class));
+        Locadora.setAgencias(carregarListaDeArquivo("agencias.txt", Agencia.class));
+        Locadora.setVeiculos(carregarListaDeArquivo("veiculos.txt", Veiculo.class));
     }
 
     private static <T> void salvarDadosEmArquivo(List<T> lista, String arquivo) throws IOException {
-        File arquivoBD = new File(arquivo);
-        if(!arquivoBD.exists()) {
-            arquivoBD.createNewFile();
-        }
+
+        verificaBancoDeDados(arquivo);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo))) {
             for (T item : lista) {
@@ -58,6 +38,9 @@ public abstract class LocadoraBD {
     }
 
     private static <T> List<T> carregarListaDeArquivo(String arquivo, Class<T> classe) throws IOException {
+
+        verificaBancoDeDados(arquivo);
+
         List<T> lista = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
             String linha;
@@ -79,6 +62,13 @@ public abstract class LocadoraBD {
             return classe.cast(Veiculo.fromString(linha));
         } else {
             throw new IllegalArgumentException("Tipo desconhecido para conversão" + classe.getName());
+        }
+    }
+
+    private static void verificaBancoDeDados(String arquivo) throws IOException {
+        File arquivoBD = new File(arquivo);
+        if(!arquivoBD.exists()) {
+            arquivoBD.createNewFile();
         }
     }
 }

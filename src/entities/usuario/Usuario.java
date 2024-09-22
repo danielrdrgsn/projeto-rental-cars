@@ -56,17 +56,17 @@ public abstract class Usuario implements Comparable<Usuario> {
     }
 
     public String mostrarUsuario() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Nome: " + nome + "\n");
-        sb.append("Email: " + email + "\n");
-        sb.append("Tipo: " + tipoUsuario.getDescricao() + "\n");
-        return sb.toString();
+        return new StringBuilder()
+                .append("Nome: " + nome + "\n")
+                .append("Email: " + email + "\n")
+                .append("Tipo: " + tipoUsuario.getDescricao() + "\n")
+                .toString();
     }
 
     @Override
     public String toString() {
-        return    nome + ','
-                + email + ','
+        return    nome + ","
+                + email + ","
                 + tipoUsuario;
     }
 

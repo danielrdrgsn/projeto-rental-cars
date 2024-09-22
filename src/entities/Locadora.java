@@ -12,7 +12,7 @@ public class Locadora {
     private String nome;
     private static List<Usuario> usuarios;
     private static List<Agencia> agencias;
-    protected static List<Veiculo> veiculos;
+    private static List<Veiculo> veiculos;
 
     public Locadora(String nome) {
         this.nome = nome;
