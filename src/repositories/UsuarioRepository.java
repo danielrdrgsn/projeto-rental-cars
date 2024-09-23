@@ -2,14 +2,20 @@ package repositories;
 
 import entities.locadora.Locadora;
 import entities.usuario.Usuario;
+import utils.persistencia.LocadoraUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 public class UsuarioRepository implements Repositorio<Usuario, String> {
     @Override
     public void adicionar(Usuario usuario) {
-        // TODO: verificar se já existe um email igual cadastrado, pra evitar duplicatas
         Locadora.getUsuarios().add(usuario);
+        try {
+            LocadoraUtils.salvarDadosLocadora();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

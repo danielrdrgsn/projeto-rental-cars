@@ -11,7 +11,7 @@ import java.util.List;
 
 public abstract class LocadoraUtils {
 
-    public static void salvarDadosLocadora(Locadora locadora) throws IOException {
+    public static void salvarDadosLocadora() throws IOException {
         salvarDadosEmArquivo(Locadora.getUsuarios(), "usuarios.txt");
         salvarDadosEmArquivo(Locadora.getAgencias(), "agencias.txt");
         salvarDadosEmArquivo(Locadora.getVeiculos(), "veiculos.txt");

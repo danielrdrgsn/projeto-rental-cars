@@ -78,8 +78,8 @@ public abstract class Usuario implements Comparable<Usuario> {
 
         return switch (tipoUsuario) {
             case ADMIN -> new Administrador(nome, email,Integer.parseInt(partes[3]));
-            case PF -> new PessoaFisica(nome, email, Integer.parseInt(partes[3]), partes[4]);
-            case PJ -> new PessoaJuridica(nome, email, Integer.parseInt(partes[3]), partes[4]);
+            case PF -> new PessoaFisica(nome, email, partes[4]);
+            case PJ -> new PessoaJuridica(nome, email, partes[4]);
         };
     }
 

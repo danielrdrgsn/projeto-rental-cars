@@ -1,12 +1,14 @@
 package entities.usuario;
 
+import entities.locadora.Locadora;
+
 public abstract class Cliente extends Usuario {
 
     private Integer idCliente; // ID
 
-    public Cliente(String nome, String email, Integer idCliente) {
+    public Cliente(String nome, String email) {
         super(nome, email);
-        this.idCliente = idCliente;
+        this.idCliente = Locadora.getUsuarios().size() + 1;
     }
 
     public Integer getIdCliente() {
