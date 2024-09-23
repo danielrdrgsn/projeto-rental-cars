@@ -151,7 +151,7 @@ public class Aluguel {
     }
 
     public void devolverVeiculoPessoaFisica() {
-        this.status = "Devolvido";
+        this.status = "Devolvido PF";
 
         if (this.carro != null) this.carro.setDisponivel(true);
 
@@ -160,6 +160,17 @@ public class Aluguel {
         if (this.caminhao != null) this.caminhao.setDisponivel(true);
     }
 
+    public void devolverVeiculoPessoaJuridica() {
+        this.status = "Devolvido PJ";
+
+        if (this.carro != null) this.carro.setDisponivel(true);
+
+        if (this.moto != null) this.moto.setDisponivel(true);
+
+        if (this.caminhao != null) this.caminhao.setDisponivel(true);
+
+
+    }
 
     private double calcularTotal(int horas, double valor) {
         double result = valor*horas;
