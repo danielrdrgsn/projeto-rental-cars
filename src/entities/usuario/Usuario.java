@@ -57,6 +57,7 @@ public abstract class Usuario implements Comparable<Usuario> {
 
     public String mostrarUsuario() {
         return new StringBuilder()
+                .append("_".repeat(50)+ "\n")
                 .append("Nome: " + nome + "\n")
                 .append("Email: " + email + "\n")
                 .append("Tipo: " + tipoUsuario.getDescricao() + "\n")

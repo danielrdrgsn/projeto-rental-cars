@@ -19,7 +19,7 @@ public class PessoaJuridica extends Cliente {
     }
 
     public String mostrarPJ() {
-        return super.toString() + "CNPJ: " + cnpj + "\n";
+        return super.mostrarUsuario() + "CNPJ: " + cnpj + "\n";
     }
 
     @Override

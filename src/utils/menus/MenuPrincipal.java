@@ -25,6 +25,7 @@ public abstract class MenuPrincipal {
 
             try {
                 opcao = input.nextInt();
+                input.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println(ConsoleColors.RED_BOLD + "Opção inválida. Apenas valores numéricos são aceitos." + ConsoleColors.RESET);
                 ativo = false;

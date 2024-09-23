@@ -35,8 +35,18 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
     }
 
     @Override
-    public Usuario buscar(String id) {
-        // TODO
+    public Usuario buscar(String email) {
+        try {
+            LocadoraUtils.carregarDadosLocadora();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        List<Usuario> usuarios = Locadora.getUsuarios();
+        for(Usuario u : usuarios){
+            if(u.getEmail().equals(email)){
+                return u;
+            }
+        }
         return null;
     }
 

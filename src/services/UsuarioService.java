@@ -6,13 +6,13 @@ import entities.usuario.PessoaFisica;
 import entities.usuario.PessoaJuridica;
 import entities.usuario.Usuario;
 import repositories.UsuarioRepository;
+import utils.ConsoleColors;
 
 import java.util.Scanner;
 
 public class UsuarioService {
 
     private static final UsuarioRepository usuarioRepository = new UsuarioRepository();
-
 
     public static void adicionar(Scanner input) {
 
@@ -46,8 +46,21 @@ public class UsuarioService {
         // TODO
     }
 
-    public static void buscar() {
-        // TODO
+    public static void buscar(Scanner input) {
+        System.out.println("Digite o e-mail do usuario: ");
+        String email  = input.nextLine(); // TODO: validação de email?
+
+        Usuario usuario = usuarioRepository.buscar(email);
+
+        if(usuario instanceof Administrador administrador) {
+            System.out.println("\n" + administrador.mostrarAdmin());
+        } else if (usuario instanceof PessoaFisica pessoaFisica) {
+            System.out.println("\n" + pessoaFisica.mostrarPF());
+        } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
+            System.out.println("\n" + pessoaJuridica.mostrarPJ());;
+        } else {
+            System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nUsuário não encontrado.\n" + ConsoleColors.RESET);
+        }
     }
 
     public static void remover() {
@@ -65,7 +78,7 @@ public class UsuarioService {
         if (!usuarioEncontrado(email)) {
             Administrador adm = new Administrador(nome, email, numeroRegistro);
             usuarioRepository.adicionar(adm);
-            System.out.println("Usuario adicionado com sucesso!");
+            System.out.println(ConsoleColors.GREEN_BOLD + "Usuario adicionado com sucesso!"+ ConsoleColors.RESET);
         }
     }
 
@@ -76,7 +89,7 @@ public class UsuarioService {
         if (!usuarioEncontrado(email)) {
             PessoaJuridica pj = new PessoaJuridica(nome, email, cnpj);
             usuarioRepository.adicionar(pj);
-            System.out.println("Usuario adicionado com sucesso!");
+            System.out.println(ConsoleColors.GREEN_BOLD + "Usuario adicionado com sucesso!"+ ConsoleColors.RESET);
         }
     }
 
@@ -87,7 +100,7 @@ public class UsuarioService {
         if (!usuarioEncontrado(email)) {
             PessoaFisica pf = new PessoaFisica(nome, email, cpf);
             usuarioRepository.adicionar(pf);
-            System.out.println("Usuario adicionado com sucesso!");
+            System.out.println(ConsoleColors.GREEN_BOLD + "Usuario adicionado com sucesso!"+ ConsoleColors.RESET);
         }
     }
 

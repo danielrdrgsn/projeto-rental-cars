@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static services.UsuarioService.buscar;
 import static utils.menus.MenuAdm.mostrarOpcoesCrud;
 import static services.UsuarioService.adicionar;
 
@@ -21,6 +22,7 @@ public abstract class MenuCrudClientes {
 
             try {
                 opcao = input.nextInt();
+                input.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println(ConsoleColors.RED_BOLD + "Opção inválida. Apenas valores numéricos são aceitos." + ConsoleColors.RESET);
                 ativo = false;
@@ -30,7 +32,7 @@ public abstract class MenuCrudClientes {
             switch (opcao) {
                 case 1 -> adicionar(input);
                 case 2 -> UsuarioService.editar();
-                case 3 -> UsuarioService.buscar();
+                case 3 -> buscar(input);
                 case 4 -> UsuarioService.remover();
                 case 5 -> UsuarioService.listar();
                 case 6 -> ativo = false;

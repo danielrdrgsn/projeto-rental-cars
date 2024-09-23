@@ -19,7 +19,10 @@ public class Administrador extends Usuario {
     }
 
     public String mostrarAdmin() {
-        return super.toString() + "Registro nº: " + numeroRegistro + "\n";
+
+        return super.mostrarUsuario()
+                + "Registro nº: " + numeroRegistro + "\n"
+                + "-".repeat(0);
     }
 
     @Override
