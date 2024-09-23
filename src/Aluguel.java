@@ -100,63 +100,66 @@ public class Aluguel {
         this.status = status;
     }
 
-
-    public void alugarVeiculoParaPessoaFisica(Cliente cliente, List<Veiculo> veiculos, List<Agencia> agencias, int horas){
-
-        boolean isAlugado = false;
-
-        for(int i=0; i<veiculos.size(); i++){
+    public void alugarVeiculoParaPessoaFisica(Cliente cliente, List<Veiculo> veiculos, List<Agencia> agencias, int horas) {
+        for (int i = 0; i < veiculos.size(); i++) {
             Veiculo veiculo = veiculos.get(i);
+            if (veiculo.isDisponivel()) {
+                this.usuario = cliente;
+                definirVeiculo(veiculo);
+                this.hora = horas;
+                this.total = calcularTotal(horas, veiculo.getValor());
+                this.status = "Veículo alugado para Pessoa Física!";
+                veiculo.setDisponivel(false);
+                this.dateTime = LocalDateTime.now();
 
-            if(veiculo.isDisponivel()){
-                this.usuario = usuario;
-
-                if(veiculo instanceof Carro){
-                    this.carro = (Carro) veiculo;
-                }else{
-                    this.carro = null;
-                }
-
-                if(veiculo instanceof Moto){
-                    this.moto = (Moto) veiculo;
-                }else{
-                    this.moto = null;
-                }
-
-                if(veiculo instanceof Caminhao){
-                    this.caminhao = (Caminhao) veiculo;
-                }else{
-                    this.caminhao = null;
-                }
-
-                // MELHORAR ISSO MAIS TARDE
-                if(!agencias.isEmpty()){
+                if (!agencias.isEmpty()) {
                     this.agencia = agencias.get(0);
                 }
 
-                this.hora = horas;
-
-                this.total = calcularTotal(horas, veiculo.getValor());
-
-                this.status = "Veículo alugado!";
-                veiculo.setDisponivel(false);
-
-                this.dateTime = LocalDateTime.now();
-
-                isAlugado = true;
-                break;
-
-
+                System.out.println("Aluguel realizado com sucesso para Pessoa Física!");
+                return;
             }
-
         }
-
-        if(!isAlugado){
-            System.out.println("Não há veículos disponíveis!");
-
+        System.out.println("Não há veículos disponíveis para Pessoa Física!");
     }
 
-}
+
+    public void alugarVeiculoParaPessoaJuridica(Cliente cliente, List<Veiculo> veiculos, List<Agencia> agencias, int horas) {
+        for (int i = 0; i < veiculos.size(); i++) {
+            Veiculo veiculo = veiculos.get(i);
+            if (veiculo.isDisponivel()) {
+                this.usuario = cliente;
+                definirVeiculo(veiculo);
+                this.hora = horas;
+                this.total = calcularTotal(horas, veiculo.getValor()) * 0.9;
+                this.status = "Veículo alugado para Pessoa Jurídica!";
+                veiculo.setDisponivel(false);
+                this.dateTime = LocalDateTime.now();
+
+                if (!agencias.isEmpty()) {
+                    this.agencia = agencias.get(0);
+                }
+
+                System.out.println("Aluguel realizado com sucesso para Pessoa Jurídica!");
+                return;
+            }
+        }
+        System.out.println("Não há veículos disponíveis para Pessoa Jurídica!");
+    }
+
+    private void definirVeiculo(Veiculo veiculo) {
+    }
+
+    public void devolverVeiculoPessoaFisica() {
+        this.status = "Devolvido";
+
+        if (this.carro != null) this.carro.setDisponivel(true);
+
+        if (this.moto != null) this.moto.setDisponivel(true);
+
+        if (this.caminhao != null) this.caminhao.setDisponivel(true);
+    }
+
 
     private double calcularTotal(int horas, double valor) {
         double result = valor*horas;
@@ -164,52 +167,5 @@ public class Aluguel {
     }
 
 
-    public void alugarVeiculoParaPessoaJuridica(Cliente cliente, List<Veiculo> veiculos, List<Agencia> agencias, int horas){
-        boolean isAlugado = false;
-
-        for(int i=0; i < veiculos.size(); i++){
-            Veiculo veiculo = veiculos.get(i);
-
-            double descontoPessoaJuridica = 0.9;
-
-            if(veiculo.isDisponivel()){
-                this.usuario = usuario;
-
-                if(veiculo instanceof Carro){
-                    this.carro = (Carro) veiculo;
-                }else{
-                    this.carro = null;
-                }
-
-                if(veiculo instanceof Moto){
-                    this.moto = (Moto) veiculo;
-                }else{
-                    this.moto = null;
-                }
-
-                if(veiculo instanceof Caminhao){
-                    this.caminhao = (Caminhao) veiculo;
-                }else{
-                    this.caminhao = null;
-                }
-
-                if(!agencias.isEmpty()){
-                    this.agencia = agencias.get(0);
-                }
-
-                this.hora = horas;
-                this.total = calcularTotal(horas, veiculo.getValor()) * descontoPessoaJuridica;
-                this.status = "Alugado PJ";
-                veiculo.setDisponivel(false);
-                this.dateTime = LocalDateTime.now();
-                isAlugado = true;
-                break;
-
-            }
-        }
-
-        if(!isAlugado){
-            System.out.println("Não há veículos disponíveis!");
-        }
-    }
+    
 }
