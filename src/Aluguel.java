@@ -1,13 +1,15 @@
+import entities.veiculo.Veiculo;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Aluguel {
 
-//    private int ID;
+    private int ID;
+    private Veiculo veiculoAlugado;
+
 //    private Usuario1 usuario;
-//    private Carro carro;
-//    private Moto moto;
-//    private Caminhao caminhao;
+
 //    private Agencia agencia;
 //    private LocalDateTime dateTime;
 //    private int hora;

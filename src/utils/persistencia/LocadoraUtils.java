@@ -1,6 +1,6 @@
-package repositories;
+package utils.persistencia;
 
-import entities.Locadora;
+import entities.locadora.Locadora;
 import entities.agencia.Agencia;
 import entities.usuario.Usuario;
 import entities.veiculo.Veiculo;
@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class LocadoraBD {
+public abstract class LocadoraUtils {
 
     public static void salvarDadosLocadora(Locadora locadora) throws IOException {
         salvarDadosEmArquivo(Locadora.getUsuarios(), "usuarios.txt");

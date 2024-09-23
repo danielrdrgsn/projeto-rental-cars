@@ -5,7 +5,7 @@ import java.util.Objects;
 public abstract class Veiculo implements Comparable<Veiculo> {
     private String placa; // ID
     private String modelo;
-    private int ano;
+    private int anoFabricacao;
     private String cor;
     protected TipoVeiculo tipo;
     private boolean disponivel;
@@ -14,7 +14,7 @@ public abstract class Veiculo implements Comparable<Veiculo> {
     public Veiculo(String placa, String modelo, int ano, String cor, boolean disponivel, Integer numeroAgencia) {
         this.placa = placa;
         this.modelo = modelo;
-        this.ano = ano;
+        this.anoFabricacao = ano;
         this.cor = cor;
         this.disponivel = disponivel;
         this.numeroAgencia = numeroAgencia;
@@ -36,12 +36,12 @@ public abstract class Veiculo implements Comparable<Veiculo> {
         this.modelo = modelo;
     }
 
-    public int getAno() {
-        return ano;
+    public int getAnoFabricacao() {
+        return anoFabricacao;
     }
 
-    public void setAno(int ano) {
-        this.ano = ano;
+    public void setAnoFabricacao(int anoFabricacao) {
+        this.anoFabricacao = anoFabricacao;
     }
 
     public String getCor() {
@@ -94,7 +94,7 @@ public abstract class Veiculo implements Comparable<Veiculo> {
         return new StringBuilder()
             .append("Placa: " + placa + "\n")
             .append("Modelo: " + modelo + "\n")
-            .append("Ano: " + ano + "\n")
+            .append("Ano: " + anoFabricacao + "\n")
             .append("Cor: " + cor + "\n")
             .append("Tipo: " + tipo.getDescricao() + "\n")
             .append("Numero Agencia: " + numeroAgencia + "\n")
@@ -105,7 +105,7 @@ public abstract class Veiculo implements Comparable<Veiculo> {
     public String toString() {
         return    placa + ","
                 + modelo + ","
-                + ano + ","
+                + anoFabricacao + ","
                 + cor + ","
                 + tipo + ","
                 + disponivel + ","

@@ -1,4 +1,4 @@
-package entities;
+package entities.locadora;
 
 import entities.agencia.Agencia;
 import entities.usuario.Usuario;

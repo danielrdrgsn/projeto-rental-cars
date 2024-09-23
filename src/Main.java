@@ -1,32 +1,19 @@
-import entities.Locadora;
-import entities.agencia.Agencia;
-import entities.agencia.Endereco;
-import entities.usuario.Administrador;
-import entities.usuario.PessoaFisica;
-import entities.usuario.PessoaJuridica;
-import entities.usuario.Usuario;
-import entities.veiculo.Caminhao;
-import entities.veiculo.Carro;
-import entities.veiculo.Moto;
-import entities.veiculo.Veiculo;
-import repositories.LocadoraBD;
+import entities.locadora.Locadora;
+import utils.persistencia.LocadoraUtils;
 import utils.ConsoleColors;
-import utils.MenusUtils;
+import utils.menus.MenuPrincipal;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
         Locadora locadora = new Locadora("* RENT-A-CAR *");
-        LocadoraBD.carregarDadosLocadora();
+        LocadoraUtils.carregarDadosLocadora();
 
-        System.out.println(locadora.getNome());
+        System.out.println(ConsoleColors.BLUE_BOLD + locadora.getNome() + ConsoleColors.RESET);
 
-        MenusUtils.mostrarMenuPrincipal();
+        MenuPrincipal.mostrarMenuPrincipal();
 
 
 //        LocadoraBD.salvarDadosLocadora(locadora);

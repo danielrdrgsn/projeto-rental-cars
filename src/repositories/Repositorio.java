@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface Repositorio<T, I> {
 
-    void salvar(T t);
-    void atualizar(T t);
-    T remover(T t);
-    T buscarPorId(I id);
-    List<T> buscarTodos();
+    void adicionar(T t);
+    void editar(T t);
+    void remover(T t);
+    T buscar(I id);
+    List<T> listar();
 
 }
