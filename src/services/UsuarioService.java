@@ -8,6 +8,7 @@ import entities.usuario.Usuario;
 import repositories.UsuarioRepository;
 import utils.ConsoleColors;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class UsuarioService {
@@ -63,12 +64,25 @@ public class UsuarioService {
         }
     }
 
-    public static void remover() {
-        // TODO
+    public static void remover(Scanner input) {
+        System.out.println("Digite o e-mail do usuario: ");
+        String email  = input.nextLine(); // TODO: validação de email?
+
+        Usuario usuario = usuarioRepository.buscar(email);
+        usuario = usuarioRepository.remover(usuario);
+
+        if(usuario != null) {
+            System.out.println("Usuário removido com sucesso.");
+        } else {
+            System.out.println("Usuário não encontrado.");
+        }
     }
 
     public static void listar() {
-        // TODO
+        List<Usuario> usuarios = usuarioRepository.listar();
+        for(Usuario usuario : usuarios) {
+            System.out.println(usuario.mostrarUsuario());
+        }
     }
 
     private static void adicionarAdministrador(Scanner input, String email, String nome) {

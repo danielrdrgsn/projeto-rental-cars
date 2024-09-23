@@ -30,8 +30,19 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
     }
 
     @Override
-    public void remover(Usuario usuario) {
-        Locadora.getUsuarios().remove(usuario);
+    public Usuario remover(Usuario usuario) {
+        try {
+            LocadoraUtils.carregarDadosLocadora();
+            int index = Locadora.getUsuarios().indexOf(usuario);
+            if(index != -1) {
+                Usuario removido = Locadora.getUsuarios().remove(index);
+                LocadoraUtils.salvarDadosLocadora();
+                return removido;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
     @Override

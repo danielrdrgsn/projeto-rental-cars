@@ -26,8 +26,9 @@ public class VeiculoRepository implements Repositorio<Veiculo, String> {
     }
 
     @Override
-    public void remover(Veiculo veiculo) {
+    public Veiculo remover(Veiculo veiculo) {
         // TODO
+        return null;
     }
 
     @Override
