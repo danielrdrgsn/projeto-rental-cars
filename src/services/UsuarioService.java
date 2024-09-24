@@ -96,20 +96,46 @@ public class UsuarioService {
         }
     }
 
-    public static void listar() {
+    public static void listar(Scanner input) {
         List<Usuario> usuarios = usuarioRepository.listar();
-        for(Usuario usuario : usuarios) {
-            if(usuario instanceof Administrador administrador) {
+
+        int tamanhoPagina = 2;
+        int totalPaginas = (int) Math.ceil((double) usuarios.size() / tamanhoPagina);
+        int paginaAtual = 1;
+
+        while(true) {
+            exibirPagina(usuarios, paginaAtual, tamanhoPagina);
+            System.out.println("\nPágina " + paginaAtual + " de " + totalPaginas);
+            System.out.println("[N] Próxima página | [P] Página anterior | [S] Sair");
+
+            String opcao = input.nextLine().toUpperCase();
+            if (opcao.equals("N") && paginaAtual < totalPaginas) {
+                paginaAtual++;
+            } else if (opcao.equals("P") && paginaAtual > 1) {
+                paginaAtual--;
+            } else if (opcao.equals("S")) {
+                break;
+            } else {
+                System.out.println("Comando inválido!");
+            }
+        }
+    }
+
+    private static void exibirPagina(List<Usuario> usuarios, int pagina, int tamanhoPagina) {
+        int inicio = (pagina - 1) * tamanhoPagina;
+        int fim = Math.min(inicio + tamanhoPagina, usuarios.size());
+
+        for (int i = inicio; i < fim; i++) {
+            if(usuarios.get(i) instanceof Administrador administrador) {
                 System.out.println(administrador.mostrarAdmin());
-            } else if (usuario instanceof PessoaFisica pessoaFisica) {
+            } else if (usuarios.get(i) instanceof PessoaFisica pessoaFisica) {
                 System.out.println(pessoaFisica.mostrarPF());
-            } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
+            } else if (usuarios.get(i) instanceof PessoaJuridica pessoaJuridica) {
                 System.out.println(pessoaJuridica.mostrarPJ());;
             } else {
                 System.out.println("Usuário de tipo desconhecido");
             }
         }
-        System.out.println();
     }
 
     private static void adicionarAdministrador(Scanner input, String email, String nome, String operacao) {

@@ -32,7 +32,7 @@ public abstract class MenuCrudClientes {
                 case 2 -> editar(input);
                 case 3 -> buscar(input);
                 case 4 -> remover(input);
-                case 5 -> listar();
+                case 5 -> listar(input);
                 case 6 -> ativo = false;
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
