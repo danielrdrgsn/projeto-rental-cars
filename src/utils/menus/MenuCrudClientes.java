@@ -29,7 +29,7 @@ public abstract class MenuCrudClientes {
 
             switch (opcao) {
                 case 1 -> adicionar(input);
-                case 2 -> UsuarioService.editar();
+                case 2 -> editar(input);
                 case 3 -> buscar(input);
                 case 4 -> remover(input);
                 case 5 -> listar();

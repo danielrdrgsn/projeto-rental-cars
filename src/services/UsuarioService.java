@@ -32,22 +32,41 @@ public class UsuarioService {
         System.out.println("Digite o email do usuário: ");
         String email = input.nextLine();
 
-        Integer idCliente = obterUltimoIdCliente() + 1;
+        Integer novoIdCliente = obterUltimoIdCliente() + 1;
 
         switch (opcao) {
-            case 1 -> adicionarPessoaFisica(input, email, nome, idCliente);
-            case 2 -> adicionarPessoaJuridica(input, email, nome, idCliente);
-            case 3 -> adicionarAdministrador(input, email, nome);
+            case 1 -> adicionarPessoaFisica(input, email, nome, novoIdCliente, "adicionado");
+            case 2 -> adicionarPessoaJuridica(input, email, nome, novoIdCliente, "adicionado");
+            case 3 -> adicionarAdministrador(input, email, nome, "adicionado");
             default -> System.out.println("Opção inválida.");
         }
     }
 
-    public static void editar() {
-        // TODO
+    public static void editar(Scanner input) {
+        System.out.println("Digite o email do usuario: ");
+        String email  = input.nextLine(); // TODO: validação de email?
+
+        Usuario usuario = usuarioRepository.buscar(email);
+
+        System.out.println("Digite o nome do usuario: ");
+        String nome = input.nextLine();
+
+        if(usuario instanceof Administrador administrador) {
+            usuarioRepository.remover(usuario);
+            adicionarAdministrador(input, email, nome, "editado");
+        } else if (usuario instanceof PessoaFisica pessoaFisica) {
+            usuarioRepository.remover(usuario);
+            adicionarPessoaFisica(input, email, nome, pessoaFisica.getIdCliente(), "editado");
+        } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
+            usuarioRepository.remover(usuario);
+            adicionarPessoaJuridica(input, email, nome, pessoaJuridica.getIdCliente(), "editado");
+        } else {
+            System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nUsuário não encontrado.\n" + ConsoleColors.RESET);
+        }
     }
 
     public static void buscar(Scanner input) {
-        System.out.println("Digite o e-mail do usuario: ");
+        System.out.println("Digite o email do usuario: ");
         String email  = input.nextLine(); // TODO: validação de email?
 
         Usuario usuario = usuarioRepository.buscar(email);
@@ -64,7 +83,7 @@ public class UsuarioService {
     }
 
     public static void remover(Scanner input) {
-        System.out.println("Digite o e-mail do usuario: ");
+        System.out.println("Digite o email do usuario: ");
         String email  = input.nextLine(); // TODO: validação de email?
 
         Usuario usuario = usuarioRepository.buscar(email);
@@ -81,51 +100,52 @@ public class UsuarioService {
         List<Usuario> usuarios = usuarioRepository.listar();
         for(Usuario usuario : usuarios) {
             if(usuario instanceof Administrador administrador) {
-                System.out.println("\n" + administrador.mostrarAdmin());
+                System.out.println(administrador.mostrarAdmin());
             } else if (usuario instanceof PessoaFisica pessoaFisica) {
-                System.out.println("\n" + pessoaFisica.mostrarPF());
+                System.out.println(pessoaFisica.mostrarPF());
             } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
-                System.out.println("\n" + pessoaJuridica.mostrarPJ());;
+                System.out.println(pessoaJuridica.mostrarPJ());;
             } else {
                 System.out.println("Usuário de tipo desconhecido");
             }
         }
+        System.out.println();
     }
 
-    private static void adicionarAdministrador(Scanner input, String email, String nome) {
+    private static void adicionarAdministrador(Scanner input, String email, String nome, String operacao) {
         System.out.println("Digite o número de registro do funcionário: ");
         Integer numeroRegistro = input.nextInt(); // TODO: verificar/validar o input
 
-        if (!usuarioEncontrado(email)) {
+        if (!usuarioJaExistente(email)) {
             Administrador adm = new Administrador(nome, email, numeroRegistro);
             usuarioRepository.adicionar(adm);
-            System.out.println(ConsoleColors.GREEN_BOLD + "Usuario adicionado com sucesso!"+ ConsoleColors.RESET);
+            System.out.println(ConsoleColors.GREEN_BOLD + "Usuario " + operacao + " com sucesso!"+ ConsoleColors.RESET);
         }
     }
 
-    private static void adicionarPessoaJuridica(Scanner input, String email, String nome, Integer idCliente) {
+    private static void adicionarPessoaJuridica(Scanner input, String email, String nome, Integer idCliente, String operacao) {
         System.out.println("Digite o CNPJ do usuario: ");
         String cnpj = input.nextLine();
 
-        if (!usuarioEncontrado(email)) {
+        if (!usuarioJaExistente(email)) {
             PessoaJuridica pj = new PessoaJuridica(nome, email, idCliente, cnpj);
             usuarioRepository.adicionar(pj);
-            System.out.println(ConsoleColors.GREEN_BOLD + "Usuario adicionado com sucesso!"+ ConsoleColors.RESET);
+            System.out.println(ConsoleColors.GREEN_BOLD + "Usuário " + operacao + " com sucesso!" + ConsoleColors.RESET);
         }
     }
 
-    private static void adicionarPessoaFisica(Scanner input, String email, String nome, Integer idCliente) {
+    private static void adicionarPessoaFisica(Scanner input, String email, String nome, Integer idCliente, String operacao) {
         System.out.println("Digite o CPF do usuario: ");
         String cpf = input.nextLine();
 
-        if (!usuarioEncontrado(email)) {
+        if (!usuarioJaExistente(email)) {
             PessoaFisica pf = new PessoaFisica(nome, email, idCliente, cpf);
             usuarioRepository.adicionar(pf);
-            System.out.println(ConsoleColors.GREEN_BOLD + "Usuario adicionado com sucesso!"+ ConsoleColors.RESET);
+            System.out.println(ConsoleColors.GREEN_BOLD + "Usuario " + operacao + " com sucesso!"+ ConsoleColors.RESET);
         }
     }
 
-    private static boolean usuarioEncontrado(String email) {
+    private static boolean usuarioJaExistente(String email) {
         boolean encontrado = false;
         for (Usuario u : Locadora.getUsuarios()) {
             if (u.getEmail().equals(email)) {
