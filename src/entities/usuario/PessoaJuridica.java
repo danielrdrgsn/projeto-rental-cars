@@ -4,8 +4,8 @@ public class PessoaJuridica extends Cliente {
 
     private String cnpj;
 
-    public PessoaJuridica(String nome, String email, String cnpj) {
-        super(nome, email);
+    public PessoaJuridica(String nome, String email, Integer idCliente, String cnpj) {
+        super(nome, email, idCliente);
         super.tipoUsuario = TipoUsuario.PJ;
         this.cnpj = cnpj;
     }
@@ -19,7 +19,8 @@ public class PessoaJuridica extends Cliente {
     }
 
     public String mostrarPJ() {
-        return super.mostrarUsuario() + "CNPJ: " + cnpj + "\n";
+        return super.mostrarCliente() + "CNPJ: " + cnpj + "\n"
+                + "-".repeat(40);
     }
 
     @Override

@@ -4,8 +4,8 @@ public class PessoaFisica extends Cliente {
 
     private String cpf;
 
-    public PessoaFisica(String nome, String email, String cpf) {
-        super(nome, email);
+    public PessoaFisica(String nome, String email, Integer idCliente, String cpf) {
+        super(nome, email, idCliente);
         super.tipoUsuario = TipoUsuario.PF;
         this.cpf = cpf;
     }
@@ -19,7 +19,8 @@ public class PessoaFisica extends Cliente {
     }
 
     public String mostrarPF() {
-        return super.mostrarUsuario() + "CPF: " + cpf + "\n";
+        return super.mostrarCliente() + "CPF: " + cpf + "\n"
+                + "-".repeat(40);
     }
 
     @Override

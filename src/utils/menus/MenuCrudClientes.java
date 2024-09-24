@@ -3,7 +3,6 @@ package utils.menus;
 import services.UsuarioService;
 import utils.ConsoleColors;
 
-import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 

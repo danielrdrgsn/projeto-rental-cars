@@ -1,10 +1,7 @@
 package services;
 
 import entities.locadora.Locadora;
-import entities.usuario.Administrador;
-import entities.usuario.PessoaFisica;
-import entities.usuario.PessoaJuridica;
-import entities.usuario.Usuario;
+import entities.usuario.*;
 import repositories.UsuarioRepository;
 import utils.ConsoleColors;
 
@@ -35,9 +32,11 @@ public class UsuarioService {
         System.out.println("Digite o email do usuário: ");
         String email = input.nextLine();
 
+        Integer idCliente = obterUltimoIdCliente() + 1;
+
         switch (opcao) {
-            case 1 -> adicionarPessoaFisica(input, email, nome);
-            case 2 -> adicionarPessoaJuridica(input, email, nome);
+            case 1 -> adicionarPessoaFisica(input, email, nome, idCliente);
+            case 2 -> adicionarPessoaJuridica(input, email, nome, idCliente);
             case 3 -> adicionarAdministrador(input, email, nome);
             default -> System.out.println("Opção inválida.");
         }
@@ -81,7 +80,15 @@ public class UsuarioService {
     public static void listar() {
         List<Usuario> usuarios = usuarioRepository.listar();
         for(Usuario usuario : usuarios) {
-            System.out.println(usuario.mostrarUsuario());
+            if(usuario instanceof Administrador administrador) {
+                System.out.println("\n" + administrador.mostrarAdmin());
+            } else if (usuario instanceof PessoaFisica pessoaFisica) {
+                System.out.println("\n" + pessoaFisica.mostrarPF());
+            } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
+                System.out.println("\n" + pessoaJuridica.mostrarPJ());;
+            } else {
+                System.out.println("Usuário de tipo desconhecido");
+            }
         }
     }
 
@@ -96,23 +103,23 @@ public class UsuarioService {
         }
     }
 
-    private static void adicionarPessoaJuridica(Scanner input, String email, String nome) {
+    private static void adicionarPessoaJuridica(Scanner input, String email, String nome, Integer idCliente) {
         System.out.println("Digite o CNPJ do usuario: ");
         String cnpj = input.nextLine();
 
         if (!usuarioEncontrado(email)) {
-            PessoaJuridica pj = new PessoaJuridica(nome, email, cnpj);
+            PessoaJuridica pj = new PessoaJuridica(nome, email, idCliente, cnpj);
             usuarioRepository.adicionar(pj);
             System.out.println(ConsoleColors.GREEN_BOLD + "Usuario adicionado com sucesso!"+ ConsoleColors.RESET);
         }
     }
 
-    private static void adicionarPessoaFisica(Scanner input, String email, String nome) {
+    private static void adicionarPessoaFisica(Scanner input, String email, String nome, Integer idCliente) {
         System.out.println("Digite o CPF do usuario: ");
         String cpf = input.nextLine();
 
         if (!usuarioEncontrado(email)) {
-            PessoaFisica pf = new PessoaFisica(nome, email, cpf);
+            PessoaFisica pf = new PessoaFisica(nome, email, idCliente, cpf);
             usuarioRepository.adicionar(pf);
             System.out.println(ConsoleColors.GREEN_BOLD + "Usuario adicionado com sucesso!"+ ConsoleColors.RESET);
         }
@@ -130,5 +137,15 @@ public class UsuarioService {
         return encontrado;
     }
 
-
+    private static Integer obterUltimoIdCliente() {
+        Integer ultimoID = -1;
+        for(Usuario u : Locadora.getUsuarios()) {
+            if(u instanceof Cliente) {
+                if(((Cliente) u).getIdCliente() > ultimoID) {
+                    ultimoID = ((Cliente) u).getIdCliente();
+                }
+            }
+        }
+        return ultimoID;
+    }
 }

@@ -22,7 +22,7 @@ public class Administrador extends Usuario {
 
         return super.mostrarUsuario()
                 + "Registro nº: " + numeroRegistro + "\n"
-                + "-".repeat(0);
+                + "-".repeat(40);
     }
 
     @Override
