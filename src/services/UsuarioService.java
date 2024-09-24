@@ -5,6 +5,7 @@ import entities.usuario.*;
 import repositories.UsuarioRepository;
 import utils.ConsoleColors;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -98,6 +99,7 @@ public class UsuarioService {
 
     public static void listar(Scanner input) {
         List<Usuario> usuarios = usuarioRepository.listar();
+        Collections.sort(usuarios);
 
         int tamanhoPagina = 2;
         int totalPaginas = (int) Math.ceil((double) usuarios.size() / tamanhoPagina);

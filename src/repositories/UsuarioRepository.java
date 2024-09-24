@@ -63,6 +63,11 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
 
     @Override
     public List<Usuario> listar() {
+        try {
+            LocadoraUtils.carregarDadosLocadora();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         return Locadora.getUsuarios();
     }
 }
