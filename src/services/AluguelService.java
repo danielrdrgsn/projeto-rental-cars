@@ -28,4 +28,10 @@ public class AluguelService {
     }
 
 
+    public void devolverVeiculo(Aluguel aluguel, LocalDate dataDevolucao, String localDevolucao){
+        aluguel.devolverVeiculo(dataDevolucao, localDevolucao);
+        System.out.println(aluguel.gerarComprovanteDeDevolucao());
+    }
+
+
 }
