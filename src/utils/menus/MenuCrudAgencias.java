@@ -1,11 +1,11 @@
 package utils.menus;
 
-import services.VeiculoService;
 import utils.ConsoleColors;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static services.AgenciaService.*;
 import static utils.menus.MenuAdm.mostrarOpcoesCrud;
 
 public class MenuCrudAgencias {
@@ -26,11 +26,11 @@ public class MenuCrudAgencias {
             }
 
             switch (opcao) {
-                case 1 -> VeiculoService.adicionar();
-                case 2 -> VeiculoService.editar();
-                case 3 -> VeiculoService.buscar();
-                case 4 -> VeiculoService.remover();
-                case 5 -> VeiculoService.listar();
+                case 1 -> adicionar(input);
+                case 2 -> editar(input);
+                case 3 -> buscar(input);
+                case 4 -> remover(input);
+                case 5 -> listar(input);
                 case 6 -> ativo = false;
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }

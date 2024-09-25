@@ -1,5 +1,6 @@
 package entities.locadora;
 
+import entities.Aluguel;
 import entities.agencia.Agencia;
 import entities.usuario.Usuario;
 import entities.veiculo.Veiculo;
@@ -13,12 +14,14 @@ public class Locadora {
     private static List<Usuario> usuarios;
     private static List<Agencia> agencias;
     private static List<Veiculo> veiculos;
+    private static List<Aluguel> alugueis;
 
     public Locadora(String nome) {
         this.nome = nome;
         usuarios = new ArrayList<>();
         agencias = new ArrayList<>();
         veiculos = new ArrayList<>();
+        alugueis = new ArrayList<>();
     }
 
     public String getNome() {
@@ -41,6 +44,10 @@ public class Locadora {
         return usuarios;
     }
 
+    public static List<Aluguel> getAlugueis() {
+        return alugueis;
+    }
+
     public static void setUsuarios(List<Usuario> usuarios) {
         Locadora.usuarios = usuarios;
     }
@@ -51,5 +58,9 @@ public class Locadora {
 
     public static void setVeiculos(List<Veiculo> veiculos) {
         Locadora.veiculos = veiculos;
+    }
+
+    public static void setAlugueis(List<Aluguel> alugueis) {
+        Locadora.alugueis = alugueis;
     }
 }

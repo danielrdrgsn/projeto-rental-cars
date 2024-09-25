@@ -1,5 +1,6 @@
 package utils.persistencia;
 
+import entities.Aluguel;
 import entities.locadora.Locadora;
 import entities.agencia.Agencia;
 import entities.usuario.Usuario;
@@ -15,12 +16,14 @@ public abstract class LocadoraUtils {
         salvarDadosEmArquivo(Locadora.getUsuarios(), "usuarios.txt");
         salvarDadosEmArquivo(Locadora.getAgencias(), "agencias.txt");
         salvarDadosEmArquivo(Locadora.getVeiculos(), "veiculos.txt");
+        salvarDadosEmArquivo(Locadora.getAlugueis(), "alugueis.txt");
     }
 
     public static void carregarDadosLocadora() throws IOException {
         Locadora.setUsuarios(carregarListaDeArquivo("usuarios.txt", Usuario.class));
         Locadora.setAgencias(carregarListaDeArquivo("agencias.txt", Agencia.class));
         Locadora.setVeiculos(carregarListaDeArquivo("veiculos.txt", Veiculo.class));
+        Locadora.setAlugueis(carregarListaDeArquivo("alugueis.txt", Aluguel.class));
     }
 
     private static <T> void salvarDadosEmArquivo(List<T> lista, String arquivo) throws IOException {
@@ -60,6 +63,8 @@ public abstract class LocadoraUtils {
             return classe.cast(Agencia.fromString(linha));
         } else if(classe.equals(Veiculo.class)) {
             return classe.cast(Veiculo.fromString(linha));
+        } else if(classe.equals(Aluguel.class)) {
+            return classe.cast(Aluguel.fromString(linha));
         } else {
             throw new IllegalArgumentException("Tipo desconhecido para conversão" + classe.getName());
         }
