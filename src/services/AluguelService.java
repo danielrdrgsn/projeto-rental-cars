@@ -6,6 +6,7 @@ import entities.veiculo.Veiculo;
 import repositories.AluguelRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class AluguelService {
 
@@ -31,6 +32,18 @@ public class AluguelService {
     public void devolverVeiculo(Aluguel aluguel, LocalDate dataDevolucao, String localDevolucao){
         aluguel.devolverVeiculo(dataDevolucao, localDevolucao);
         System.out.println(aluguel.gerarComprovanteDeDevolucao());
+    }
+
+    public List<Aluguel> listarAlugueis(){
+        return aluguelRepository.buscarTodos();
+    }
+
+    public List<Aluguel> buscarAlugueisPorCliente(Cliente cliente){
+        return aluguelRepository.buscarPorCliente(cliente);
+    }
+
+    public List<Aluguel> buscarAlugueisPorVeiculo(Veiculo veiculo){
+        return aluguelRepository.buscarPorVeiculo(veiculo);
     }
 
 
