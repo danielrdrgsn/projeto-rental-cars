@@ -37,6 +37,13 @@ public class Aluguel {
         veiculo.alteraDisponibilidade();
     }
 
+    public void devolverVeiculo(LocalDate dataDevolucao, String localDevolucao){
+        this.dataDevolucao = dataDevolucao;
+        this.localDevolucao = localDevolucao;
+        this.isDevolvido = true;
+        veiculo.alteraDisponibilidade();
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
