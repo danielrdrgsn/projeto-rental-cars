@@ -24,6 +24,19 @@ public class Aluguel {
         this.isDevolvido = false;
     }
 
+
+
+
+
+    public void alugarVeiculo(){
+        if(!veiculo.isDisponivel()){
+
+            throw new IllegalArgumentException("Este veículo não está disponível!");
+
+        }
+        veiculo.alteraDisponibilidade();
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
