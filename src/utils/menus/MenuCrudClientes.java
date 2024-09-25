@@ -1,6 +1,5 @@
 package utils.menus;
 
-import services.UsuarioService;
 import utils.ConsoleColors;
 
 import java.util.InputMismatchException;

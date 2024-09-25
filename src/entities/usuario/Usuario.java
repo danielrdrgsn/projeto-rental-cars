@@ -1,5 +1,6 @@
 package entities.usuario;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public abstract class Usuario implements Comparable<Usuario> {
@@ -57,7 +58,7 @@ public abstract class Usuario implements Comparable<Usuario> {
 
     public String mostrarUsuario() {
         return new StringBuilder()
-                .append("_".repeat(40)+ "\n")
+                .append("_".repeat(40) + "\n")
                 .append("Nome: " + nome + "\n")
                 .append("Email: " + email + "\n")
                 .append("Tipo: " + tipoUsuario.getDescricao() + "\n")
@@ -78,59 +79,9 @@ public abstract class Usuario implements Comparable<Usuario> {
         TipoUsuario tipoUsuario = TipoUsuario.valueOf(partes[2]);
 
         return switch (tipoUsuario) {
-            case ADMIN -> new Administrador(nome, email,Integer.parseInt(partes[3]));
+            case ADMIN -> new Administrador(nome, email, Integer.parseInt(partes[3]));
             case PF -> new PessoaFisica(nome, email, Integer.parseInt(partes[3]), partes[4]);
             case PJ -> new PessoaJuridica(nome, email, Integer.parseInt(partes[3]), partes[4]);
         };
     }
-
-    //    public static void main(String[] args) {
-//        Scanner sc = new Scanner(System.in);
-//        boolean executando = true;
-//
-//        while (executando) {
-//            System.out.println("\nMENU - ADMINISTRADOR");
-//            System.out.println("\n1. Agências"); // ELOISE
-//            System.out.println("2. Veículos"); // THIAGO
-//            System.out.println("3. Aluguéis"); // VINICIUS
-//            System.out.println("4. Clientes"); // SAMUEL
-//            System.out.println("5. Sair");
-//            System.out.print("Escolha uma opção: ");
-//
-//            int opcao = sc.nextInt();
-//            sc.nextLine();
-//
-//            switch (opcao) {
-//                case 1:
-//                    cadastrarAgencia(sc);
-//                    break;
-//                case 2:
-//                    cadastrarCliente(sc);
-//                    break;
-//                case 3:
-//                    cadastrarVeiculo(sc);
-//                    break;
-//                case 4:
-//                    alugarVeiculo(sc);
-//                    break;
-//                case 5:
-//                    devolverVeiculo(sc);
-//                    break;
-//                case 6:
-//                    listarVeiculosDisponiveis();
-//                    break;
-//                case 7:
-//                    listarClientes();
-//                    break;
-//                case 8:
-//                    executando = false;
-//                    break;
-//                default:
-//                    System.out.println("Opção inválida.");
-//            }
-//        }
-//
-//        sc.close();
-//        System.out.println("Saindo...");
-//    }
 }

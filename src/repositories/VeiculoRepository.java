@@ -15,7 +15,7 @@ public class VeiculoRepository implements Repositorio<Veiculo, String> {
     }
 
     @Override
-    public void editar(Veiculo veiculo) {
+    public void editar(Veiculo veiculo, String placa) {
         for(Veiculo v : Locadora.getVeiculos()) {
             if(v.getPlaca().equals(veiculo.getPlaca())) {
                 v.setPlaca(veiculo.getPlaca());

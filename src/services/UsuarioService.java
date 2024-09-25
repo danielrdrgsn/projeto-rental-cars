@@ -44,25 +44,58 @@ public class UsuarioService {
     }
 
     public static void editar(Scanner input) {
-        System.out.println("Digite o email do usuario: ");
-        String email  = input.nextLine(); // TODO: validação de email?
-
+        System.out.println("Digite o email do usuario que deseja alterar dados: ");
+        String email  = input.nextLine();
         Usuario usuario = usuarioRepository.buscar(email);
 
-        System.out.println("Digite o nome do usuario: ");
-        String nome = input.nextLine();
+        if(usuario == null) {
+            System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nUsuário não encontrado.\n" + ConsoleColors.RESET);
+            return;
+        }
+
+        System.out.println("Digite um novo email para o usuario ou tecle <ENTER> para manter o mesmo: ");
+        String novoEmail  = input.nextLine();
+        Usuario usuarioExistente = usuarioRepository.buscar(novoEmail);
+
+        while(usuarioExistente != null && usuarioExistente.equals(usuario)) {
+            // TODO CORRIGIR CHECKING DE USUÁRIO EXISTENTE
+            System.out.println("Email já cadastrado para outro usuário.");
+            System.out.println("Digite um novo email para o usuario ou tecle <ENTER> para manter o mesmo: ");
+            novoEmail  = input.nextLine();
+            usuarioExistente = usuarioRepository.buscar(novoEmail);
+        }
+        usuario.setEmail(novoEmail.isEmpty()? usuario.getEmail() : novoEmail);
+
+        System.out.println("Digite o novo nome de usuario ou tecle <ENTER> para manter o mesmo: ");
+        String novoNome = input.nextLine();
+        usuario.setNome(novoNome.isEmpty() ? usuario.getNome() : novoNome);
 
         if(usuario instanceof Administrador administrador) {
-            usuarioRepository.remover(usuario);
-            adicionarAdministrador(input, email, nome, "editado");
+            System.out.println("Digite o novo número de registro do funcionário ou tecle <ENTER> para manter o mesmo: ");
+            String entrada = input.nextLine();
+            Integer registroAntigo = administrador.getNumeroRegistro();
+            Integer novoRegistro = null;
+            try {
+                if(!entrada.isEmpty()) {
+                    novoRegistro = Integer.parseInt(entrada);
+                }
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            administrador.setNumeroRegistro(novoRegistro != null ? novoRegistro : registroAntigo);
+            usuarioRepository.editar(usuario, email);
         } else if (usuario instanceof PessoaFisica pessoaFisica) {
-            usuarioRepository.remover(usuario);
-            adicionarPessoaFisica(input, email, nome, pessoaFisica.getIdCliente(), "editado");
+            System.out.println("Digite o novo CPF ou tecle <ENTER> para manter o mesmo: ");
+            String novoCpf = input.nextLine();
+            String cpfAntigo = pessoaFisica.getCpf();
+            pessoaFisica.setCpf(novoCpf.isEmpty() ? cpfAntigo : novoCpf);
+            usuarioRepository.editar(pessoaFisica, email);
         } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
-            usuarioRepository.remover(usuario);
-            adicionarPessoaJuridica(input, email, nome, pessoaJuridica.getIdCliente(), "editado");
-        } else {
-            System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nUsuário não encontrado.\n" + ConsoleColors.RESET);
+            System.out.println("Digite o novo CNPJ ou tecle <ENTER> para manter o mesmo: ");
+            String novoCnpj = input.nextLine();
+            String cnpjAntigo = pessoaJuridica.getCnpj();
+            pessoaJuridica.setCnpj(novoCnpj.isEmpty() ? cnpjAntigo : novoCnpj);
+            usuarioRepository.editar(pessoaJuridica, email);
         }
     }
 
@@ -143,6 +176,7 @@ public class UsuarioService {
     private static void adicionarAdministrador(Scanner input, String email, String nome, String operacao) {
         System.out.println("Digite o número de registro do funcionário: ");
         Integer numeroRegistro = input.nextInt(); // TODO: verificar/validar o input
+        input.nextLine();
 
         if (!usuarioJaExistente(email)) {
             Administrador adm = new Administrador(nome, email, numeroRegistro);
