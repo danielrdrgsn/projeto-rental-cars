@@ -27,7 +27,6 @@ public class Aluguel {
 
 
 
-
     public void alugarVeiculo(){
         if(!veiculo.isDisponivel()){
 
@@ -37,12 +36,28 @@ public class Aluguel {
         veiculo.alteraDisponibilidade();
     }
 
+
+
     public void devolverVeiculo(LocalDate dataDevolucao, String localDevolucao){
         this.dataDevolucao = dataDevolucao;
         this.localDevolucao = localDevolucao;
         this.isDevolvido = true;
         veiculo.alteraDisponibilidade();
     }
+
+
+
+    public String gerarComprovanteAluguel(){
+
+        return "Comprovante de Aluguel: \n"
+                + "Cliente - " + cliente.getNome() + "\n"
+                + "Veículo - " + veiculo.getModelo() + "\n"
+                + "Data do Aluguel - " + dataAluguel + "\n"
+                + "Local do Aluguel - " + localAluguel + "\n"
+                + "Devolução - " + (isDevolvido ? "Sim" : "Não") + "\n";
+
+    }
+
 
     public Cliente getCliente() {
         return cliente;
