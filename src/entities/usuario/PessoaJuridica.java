@@ -1,11 +1,13 @@
 package entities.usuario;
 
+import utils.ConsoleColors;
+
 public class PessoaJuridica extends Cliente {
 
     private String cnpj;
 
-    public PessoaJuridica(String nome, String email, Integer idCliente, String cnpj) {
-        super(nome, email, idCliente);
+    public PessoaJuridica(Integer idUsuario, String nome, String email, Integer idCliente, String cnpj) {
+        super(idUsuario, nome, email, idCliente);
         super.tipoUsuario = TipoUsuario.PJ;
         this.cnpj = cnpj;
     }
@@ -20,7 +22,7 @@ public class PessoaJuridica extends Cliente {
 
     public String mostrarPJ() {
         return super.mostrarCliente() + "CNPJ: " + cnpj + "\n"
-                + "-".repeat(40);
+                + ConsoleColors.YELLOW_BOLD + "-".repeat(40) + ConsoleColors.RESET;
     }
 
     @Override
