@@ -50,6 +50,7 @@ public class AluguelRepositoryImplementacao implements AluguelRepository{
                 resultados.add(aluguel);
             }
         }
+
         return resultados;
     }
 }
