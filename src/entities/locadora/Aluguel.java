@@ -47,7 +47,7 @@ public class Aluguel {
 
 
 
-    public String gerarComprovanteAluguel(){
+    public String gerarComprovanteDeAluguel(){
 
         return "Comprovante de Aluguel: \n"
                 + "Cliente - " + cliente.getNome() + "\n"
@@ -56,6 +56,24 @@ public class Aluguel {
                 + "Local do Aluguel - " + localAluguel + "\n"
                 + "Devolução - " + (isDevolvido ? "Sim" : "Não") + "\n";
 
+    }
+
+    public String gerarComprovanteDeDevolucao(){
+        return "Comprovante de Devolução: \n"
+                + "Cliente - " + cliente.getNome() + "\n"
+                + "Veículo - " + veiculo.getModelo() + "\n"
+                + "Data do Aluguel - " + dataAluguel + "\n"
+                + "Data de Devolução - " + dataDevolucao + "\n"
+                + "Local de Devolução - " + localDevolucao + "\n"
+                + "Total de Dias Alugados - " + calcularDiasAlugados() + "dias" + "\n";
+
+    }
+
+    public long calcularDiasAlugados(){
+        if(dataDevolucao != null){
+            return dataDevolucao.toEpochDay() - dataAluguel.toEpochDay();
+        }
+        return 0;
     }
 
 
