@@ -1,16 +1,29 @@
 package entities.usuario;
 
+import utils.ConsoleColors;
+
+import java.util.Arrays;
 import java.util.Objects;
 
 public abstract class Usuario implements Comparable<Usuario> {
 
+    private Integer id;
     private String nome;
     private String email; // ID
     protected TipoUsuario tipoUsuario;
 
-    public Usuario(String nome, String email) {
+    public Usuario(Integer Id, String nome, String email) {
+        this.id = Id;
         this.nome = nome;
         this.email = email;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -42,12 +55,12 @@ public abstract class Usuario implements Comparable<Usuario> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return Objects.equals(email, usuario.email);
+        return Objects.equals(id, usuario.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(email);
+        return Objects.hashCode(id);
     }
 
     @Override
@@ -57,7 +70,7 @@ public abstract class Usuario implements Comparable<Usuario> {
 
     public String mostrarUsuario() {
         return new StringBuilder()
-                .append("_".repeat(40)+ "\n")
+                .append(ConsoleColors.BLUE_BOLD + "_".repeat(40) + ConsoleColors.RESET + "\n")
                 .append("Nome: " + nome + "\n")
                 .append("Email: " + email + "\n")
                 .append("Tipo: " + tipoUsuario.getDescricao() + "\n")
@@ -66,71 +79,23 @@ public abstract class Usuario implements Comparable<Usuario> {
 
     @Override
     public String toString() {
-        return    nome + ","
+        return    id + ","
+                + nome + ","
                 + email + ","
                 + tipoUsuario;
     }
 
     public static Usuario fromString(String linha) {
         String[] partes = linha.split(",");
-        String nome = partes[0];
-        String email = partes[1];
-        TipoUsuario tipoUsuario = TipoUsuario.valueOf(partes[2]);
+        Integer id = Integer.parseInt(partes[0]);
+        String nome = partes[1];
+        String email = partes[2];
+        TipoUsuario tipoUsuario = TipoUsuario.valueOf(partes[3]);
 
         return switch (tipoUsuario) {
-            case ADMIN -> new Administrador(nome, email,Integer.parseInt(partes[3]));
-            case PF -> new PessoaFisica(nome, email, Integer.parseInt(partes[3]), partes[4]);
-            case PJ -> new PessoaJuridica(nome, email, Integer.parseInt(partes[3]), partes[4]);
+            case ADMIN -> new Administrador(id, nome, email, Integer.parseInt(partes[4]));
+            case PF -> new PessoaFisica(id, nome, email, Integer.parseInt(partes[4]), partes[5]);
+            case PJ -> new PessoaJuridica(id, nome, email, Integer.parseInt(partes[4]), partes[5]);
         };
     }
-
-    //    public static void main(String[] args) {
-//        Scanner sc = new Scanner(System.in);
-//        boolean executando = true;
-//
-//        while (executando) {
-//            System.out.println("\nMENU - ADMINISTRADOR");
-//            System.out.println("\n1. Agências"); // ELOISE
-//            System.out.println("2. Veículos"); // THIAGO
-//            System.out.println("3. Aluguéis"); // VINICIUS
-//            System.out.println("4. Clientes"); // SAMUEL
-//            System.out.println("5. Sair");
-//            System.out.print("Escolha uma opção: ");
-//
-//            int opcao = sc.nextInt();
-//            sc.nextLine();
-//
-//            switch (opcao) {
-//                case 1:
-//                    cadastrarAgencia(sc);
-//                    break;
-//                case 2:
-//                    cadastrarCliente(sc);
-//                    break;
-//                case 3:
-//                    cadastrarVeiculo(sc);
-//                    break;
-//                case 4:
-//                    alugarVeiculo(sc);
-//                    break;
-//                case 5:
-//                    devolverVeiculo(sc);
-//                    break;
-//                case 6:
-//                    listarVeiculosDisponiveis();
-//                    break;
-//                case 7:
-//                    listarClientes();
-//                    break;
-//                case 8:
-//                    executando = false;
-//                    break;
-//                default:
-//                    System.out.println("Opção inválida.");
-//            }
-//        }
-//
-//        sc.close();
-//        System.out.println("Saindo...");
-//    }
 }

@@ -4,8 +4,8 @@ public abstract class Cliente extends Usuario {
 
     private final Integer idCliente; // ID
 
-    public Cliente(String nome, String email, Integer idCliente) {
-        super(nome, email);
+    public Cliente(Integer idUsuario, String nome, String email, Integer idCliente) {
+        super(idUsuario, nome, email);
         this.idCliente = idCliente;
     }
 
@@ -14,8 +14,7 @@ public abstract class Cliente extends Usuario {
     }
 
     public String mostrarCliente() {
-        return super.mostrarUsuario()
-                + "ID Cliente: " + idCliente + "\n";
+        return super.mostrarUsuario();
     }
 
     @Override

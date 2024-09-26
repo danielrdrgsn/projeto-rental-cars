@@ -33,36 +33,69 @@ public class UsuarioService {
         System.out.println("Digite o email do usuário: ");
         String email = input.nextLine();
 
+        Integer novoIdUsuario = obterUltimoIdUsuario() + 1;
         Integer novoIdCliente = obterUltimoIdCliente() + 1;
 
         switch (opcao) {
-            case 1 -> adicionarPessoaFisica(input, email, nome, novoIdCliente, "adicionado");
-            case 2 -> adicionarPessoaJuridica(input, email, nome, novoIdCliente, "adicionado");
-            case 3 -> adicionarAdministrador(input, email, nome, "adicionado");
+            case 1 -> adicionarPessoaFisica(input, novoIdUsuario, email, nome, novoIdCliente, "adicionado");
+            case 2 -> adicionarPessoaJuridica(input, novoIdUsuario, email, nome, novoIdCliente, "adicionado");
+            case 3 -> adicionarAdministrador(input, novoIdUsuario, email, nome, "adicionado");
             default -> System.out.println("Opção inválida.");
         }
     }
 
     public static void editar(Scanner input) {
-        System.out.println("Digite o email do usuario: ");
-        String email  = input.nextLine(); // TODO: validação de email?
-
+        System.out.println("Digite o email do usuario que deseja alterar dados: ");
+        String email  = input.nextLine();
         Usuario usuario = usuarioRepository.buscar(email);
 
-        System.out.println("Digite o nome do usuario: ");
-        String nome = input.nextLine();
+        if(usuario == null) {
+            System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nUsuário não encontrado.\n" + ConsoleColors.RESET);
+            return;
+        }
+
+        System.out.println("Digite um novo email para o usuario ou tecle <ENTER> para manter o mesmo: ");
+        String novoEmail  = input.nextLine();
+        Usuario usuarioExistente = usuarioRepository.buscar(novoEmail);
+
+        while(usuarioExistente != null && !usuarioExistente.getId().equals(usuario.getId())) {
+            System.out.println("Email já cadastrado para outro usuário.");
+            System.out.println("Digite um novo email para o usuario ou tecle <ENTER> para manter o mesmo: ");
+            novoEmail  = input.nextLine();
+            usuarioExistente = usuarioRepository.buscar(novoEmail);
+        }
+        usuario.setEmail(novoEmail.isEmpty()? usuario.getEmail() : novoEmail);
+
+        System.out.println("Digite o novo nome de usuario ou tecle <ENTER> para manter o mesmo: ");
+        String novoNome = input.nextLine();
+        usuario.setNome(novoNome.isEmpty() ? usuario.getNome() : novoNome);
 
         if(usuario instanceof Administrador administrador) {
-            usuarioRepository.remover(usuario);
-            adicionarAdministrador(input, email, nome, "editado");
+            System.out.println("Digite o novo número de registro do funcionário ou tecle <ENTER> para manter o mesmo: ");
+            String entrada = input.nextLine();
+            Integer registroAntigo = administrador.getNumeroRegistro();
+            Integer novoRegistro = null;
+            try {
+                if(!entrada.isEmpty()) {
+                    novoRegistro = Integer.parseInt(entrada);
+                }
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            administrador.setNumeroRegistro(novoRegistro != null ? novoRegistro : registroAntigo);
+            usuarioRepository.editar(usuario, email);
         } else if (usuario instanceof PessoaFisica pessoaFisica) {
-            usuarioRepository.remover(usuario);
-            adicionarPessoaFisica(input, email, nome, pessoaFisica.getIdCliente(), "editado");
+            System.out.println("Digite o novo CPF ou tecle <ENTER> para manter o mesmo: ");
+            String novoCpf = input.nextLine();
+            String cpfAntigo = pessoaFisica.getCpf();
+            pessoaFisica.setCpf(novoCpf.isEmpty() ? cpfAntigo : novoCpf);
+            usuarioRepository.editar(pessoaFisica, email);
         } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
-            usuarioRepository.remover(usuario);
-            adicionarPessoaJuridica(input, email, nome, pessoaJuridica.getIdCliente(), "editado");
-        } else {
-            System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nUsuário não encontrado.\n" + ConsoleColors.RESET);
+            System.out.println("Digite o novo CNPJ ou tecle <ENTER> para manter o mesmo: ");
+            String novoCnpj = input.nextLine();
+            String cnpjAntigo = pessoaJuridica.getCnpj();
+            pessoaJuridica.setCnpj(novoCnpj.isEmpty() ? cnpjAntigo : novoCnpj);
+            usuarioRepository.editar(pessoaJuridica, email);
         }
     }
 
@@ -101,24 +134,24 @@ public class UsuarioService {
         List<Usuario> usuarios = usuarioRepository.listar();
         Collections.sort(usuarios);
 
-        int tamanhoPagina = 2;
+        int tamanhoPagina = 2; // quantidade de itens por página
         int totalPaginas = (int) Math.ceil((double) usuarios.size() / tamanhoPagina);
         int paginaAtual = 1;
 
         while(true) {
             exibirPagina(usuarios, paginaAtual, tamanhoPagina);
             System.out.println("\nPágina " + paginaAtual + " de " + totalPaginas);
-            System.out.println("[N] Próxima página | [P] Página anterior | [S] Sair");
+            System.out.println("[P] Próxima página | [A] Página anterior | [S] Sair");
 
             String opcao = input.nextLine().toUpperCase();
-            if (opcao.equals("N") && paginaAtual < totalPaginas) {
+            if (opcao.equals("P") && paginaAtual < totalPaginas) {
                 paginaAtual++;
-            } else if (opcao.equals("P") && paginaAtual > 1) {
+            } else if (opcao.equals("A") && paginaAtual > 1) {
                 paginaAtual--;
             } else if (opcao.equals("S")) {
                 break;
             } else {
-                System.out.println("Comando inválido!");
+                System.out.println(ConsoleColors.RED + "Comando inválido!" + ConsoleColors.RESET);
             }
         }
     }
@@ -140,34 +173,35 @@ public class UsuarioService {
         }
     }
 
-    private static void adicionarAdministrador(Scanner input, String email, String nome, String operacao) {
+    private static void adicionarAdministrador(Scanner input, Integer idUsuario, String email, String nome, String operacao) {
         System.out.println("Digite o número de registro do funcionário: ");
         Integer numeroRegistro = input.nextInt(); // TODO: verificar/validar o input
+        input.nextLine();
 
         if (!usuarioJaExistente(email)) {
-            Administrador adm = new Administrador(nome, email, numeroRegistro);
+            Administrador adm = new Administrador(idUsuario, nome, email, numeroRegistro);
             usuarioRepository.adicionar(adm);
             System.out.println(ConsoleColors.GREEN_BOLD + "Usuario " + operacao + " com sucesso!"+ ConsoleColors.RESET);
         }
     }
 
-    private static void adicionarPessoaJuridica(Scanner input, String email, String nome, Integer idCliente, String operacao) {
+    private static void adicionarPessoaJuridica(Scanner input, Integer idUsuario, String email, String nome, Integer idCliente, String operacao) {
         System.out.println("Digite o CNPJ do usuario: ");
         String cnpj = input.nextLine();
 
         if (!usuarioJaExistente(email)) {
-            PessoaJuridica pj = new PessoaJuridica(nome, email, idCliente, cnpj);
+            PessoaJuridica pj = new PessoaJuridica(idUsuario, nome, email, idCliente, cnpj);
             usuarioRepository.adicionar(pj);
             System.out.println(ConsoleColors.GREEN_BOLD + "Usuário " + operacao + " com sucesso!" + ConsoleColors.RESET);
         }
     }
 
-    private static void adicionarPessoaFisica(Scanner input, String email, String nome, Integer idCliente, String operacao) {
+    private static void adicionarPessoaFisica(Scanner input, Integer idUsuario, String email, String nome, Integer idCliente, String operacao) {
         System.out.println("Digite o CPF do usuario: ");
         String cpf = input.nextLine();
 
         if (!usuarioJaExistente(email)) {
-            PessoaFisica pf = new PessoaFisica(nome, email, idCliente, cpf);
+            PessoaFisica pf = new PessoaFisica(idUsuario, nome, email, idCliente, cpf);
             usuarioRepository.adicionar(pf);
             System.out.println(ConsoleColors.GREEN_BOLD + "Usuario " + operacao + " com sucesso!"+ ConsoleColors.RESET);
         }
@@ -192,6 +226,16 @@ public class UsuarioService {
                 if(((Cliente) u).getIdCliente() > ultimoID) {
                     ultimoID = ((Cliente) u).getIdCliente();
                 }
+            }
+        }
+        return ultimoID;
+    }
+
+    private static Integer obterUltimoIdUsuario() {
+        Integer ultimoID = -1;
+        for(Usuario u : Locadora.getUsuarios()) {
+            if(u.getId() > ultimoID) {
+                    ultimoID = u.getId();
             }
         }
         return ultimoID;

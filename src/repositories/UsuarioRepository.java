@@ -1,6 +1,9 @@
 package repositories;
 
 import entities.locadora.Locadora;
+import entities.usuario.Administrador;
+import entities.usuario.PessoaFisica;
+import entities.usuario.PessoaJuridica;
 import entities.usuario.Usuario;
 import utils.persistencia.LocadoraUtils;
 
@@ -19,14 +22,27 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
     }
 
     @Override
-    public void editar(Usuario usuario) {
-        for(Usuario u : Locadora.getUsuarios()){
-            if(u.getEmail().equals(usuario.getEmail())){
-                u.setNome(usuario.getNome());
-                // TODO: verificar o tipo de usuário pra atualizar as infos corretas
+    public void editar(Usuario usuario, String email) {
+        try {
+            LocadoraUtils.carregarDadosLocadora();
+            Usuario antigo = buscar(email);
+            int index = Locadora.getUsuarios().indexOf(antigo);
+            if(index != -1) {
+                Usuario editado = Locadora.getUsuarios().get(index);
+                editado.setNome(usuario.getNome());
+                editado.setEmail(usuario.getEmail());
+                if (editado instanceof Administrador adminUser) {
+                    adminUser.setNumeroRegistro(((Administrador) usuario).getNumeroRegistro());
+                } else if (editado instanceof PessoaFisica pessoaFisica) {
+                    pessoaFisica.setCpf(((PessoaFisica) usuario).getCpf());
+                } else if (editado instanceof PessoaJuridica pessoaJuridica) {
+                    pessoaJuridica.setCnpj(((PessoaJuridica) usuario).getCnpj());
+                }
+                LocadoraUtils.salvarDadosLocadora();
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
     }
 
     @Override
@@ -47,11 +63,7 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
 
     @Override
     public Usuario buscar(String email) {
-        try {
-            LocadoraUtils.carregarDadosLocadora();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        carregaDadosLocadora();
         List<Usuario> usuarios = Locadora.getUsuarios();
         for(Usuario u : usuarios){
             if(u.getEmail().equals(email)){
@@ -61,13 +73,19 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
         return null;
     }
 
+
+
     @Override
     public List<Usuario> listar() {
+        carregaDadosLocadora();
+        return Locadora.getUsuarios();
+    }
+
+    private static void carregaDadosLocadora() {
         try {
             LocadoraUtils.carregarDadosLocadora();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return Locadora.getUsuarios();
     }
 }

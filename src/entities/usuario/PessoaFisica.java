@@ -1,11 +1,13 @@
 package entities.usuario;
 
+import utils.ConsoleColors;
+
 public class PessoaFisica extends Cliente {
 
     private String cpf;
 
-    public PessoaFisica(String nome, String email, Integer idCliente, String cpf) {
-        super(nome, email, idCliente);
+    public PessoaFisica(Integer idUsuario, String nome, String email, Integer idCliente, String cpf) {
+        super(idUsuario, nome, email, idCliente);
         super.tipoUsuario = TipoUsuario.PF;
         this.cpf = cpf;
     }
@@ -20,7 +22,7 @@ public class PessoaFisica extends Cliente {
 
     public String mostrarPF() {
         return super.mostrarCliente() + "CPF: " + cpf + "\n"
-                + "-".repeat(40);
+                + ConsoleColors.YELLOW_BOLD + "-".repeat(40) + ConsoleColors.RESET;
     }
 
     @Override

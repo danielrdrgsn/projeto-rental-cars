@@ -26,11 +26,11 @@ public class MenuCrudVeiculos {
             }
 
             switch (opcao) {
-                case 1 -> VeiculoService.adicionar();
-                case 2 -> VeiculoService.editar();
-                case 3 -> VeiculoService.buscar();
-                case 4 -> VeiculoService.remover();
-                case 5 -> VeiculoService.listar();
+                case 1 -> VeiculoService.adicionar(input);
+                case 2 -> VeiculoService.editar(input);
+                case 3 -> VeiculoService.buscar(input);
+                case 4 -> VeiculoService.remover(input);
+                case 5 -> VeiculoService.listar(input);
                 case 6 -> ativo = false;
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }

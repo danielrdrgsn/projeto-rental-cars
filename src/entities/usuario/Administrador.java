@@ -1,11 +1,13 @@
 package entities.usuario;
 
+import utils.ConsoleColors;
+
 public class Administrador extends Usuario {
 
     private Integer numeroRegistro;
 
-    public Administrador(String nome, String email, Integer numeroRegistro) {
-        super(nome, email);
+    public Administrador(Integer idUsuario, String nome, String email, Integer numeroRegistro) {
+        super(idUsuario, nome, email);
         super.tipoUsuario = TipoUsuario.ADMIN;
         this.numeroRegistro = numeroRegistro;
     }
@@ -22,7 +24,7 @@ public class Administrador extends Usuario {
 
         return super.mostrarUsuario()
                 + "Registro nº: " + numeroRegistro + "\n"
-                + "-".repeat(40);
+                + ConsoleColors.YELLOW_BOLD + "-".repeat(40) + ConsoleColors.RESET;
     }
 
     @Override

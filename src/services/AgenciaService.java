@@ -2,7 +2,7 @@ package services;
 
 import java.util.Scanner;
 
-public class VeiculoService {
+public class AgenciaService {
 
 
     public static void adicionar(Scanner input) {
