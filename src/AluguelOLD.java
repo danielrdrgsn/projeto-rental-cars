@@ -1,9 +1,6 @@
 import entities.veiculo.Veiculo;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
-public class Aluguel {
+public class AluguelOLD {
 
     private int ID;
     private Veiculo veiculoAlugado;
