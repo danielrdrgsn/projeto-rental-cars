@@ -2,7 +2,6 @@ package entities.usuario;
 
 import utils.ConsoleColors;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public abstract class Usuario implements Comparable<Usuario> {
@@ -69,17 +68,15 @@ public abstract class Usuario implements Comparable<Usuario> {
     }
 
     public String mostrarUsuario() {
-        return new StringBuilder()
-                .append(ConsoleColors.BLUE_BOLD + "_".repeat(40) + ConsoleColors.RESET + "\n")
-                .append("Nome: " + nome + "\n")
-                .append("Email: " + email + "\n")
-                .append("Tipo: " + tipoUsuario.getDescricao() + "\n")
-                .toString();
+        return ConsoleColors.BLUE_BOLD + "_".repeat(40) + ConsoleColors.RESET + "\n" +
+                "Nome: " + nome + "\n" +
+                "Email: " + email + "\n" +
+                "Tipo: " + tipoUsuario.getDescricao() + "\n";
     }
 
     @Override
     public String toString() {
-        return    id + ","
+        return id + ","
                 + nome + ","
                 + email + ","
                 + tipoUsuario;

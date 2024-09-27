@@ -87,14 +87,12 @@ public class Endereco {
     }
 
     public String mostrarEndereco() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Logradouro: ").append(logradouro);
-        sb.append("\nNumero: ").append(numero);
-        sb.append("\nComplemento: ").append(complemento);
-        sb.append("\nCidade: ").append(cidade);
-        sb.append("\nEstado: ").append(estado);
-        sb.append("\nCEP: ").append(cep);
-        return sb.toString();
+        return "Logradouro: " + logradouro +
+                "\nNumero: " + numero +
+                "\nComplemento: " + complemento +
+                "\nCidade: " + cidade +
+                "\nEstado: " + estado +
+                "\nCEP: " + cep;
     }
 
     @Override

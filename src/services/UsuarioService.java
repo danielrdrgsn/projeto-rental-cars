@@ -56,8 +56,8 @@ public class UsuarioService {
 
         System.out.println("Digite um novo email para o usuario ou tecle <ENTER> para manter o mesmo: ");
         String novoEmail  = input.nextLine();
-        Usuario usuarioExistente = usuarioRepository.buscar(novoEmail);
 
+        Usuario usuarioExistente = usuarioRepository.buscar(novoEmail);
         while(usuarioExistente != null && !usuarioExistente.getId().equals(usuario.getId())) {
             System.out.println("Email já cadastrado para outro usuário.");
             System.out.println("Digite um novo email para o usuario ou tecle <ENTER> para manter o mesmo: ");

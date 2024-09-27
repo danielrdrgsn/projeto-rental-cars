@@ -29,7 +29,6 @@ classDiagram
         PJ
     }
 
-
     Veiculo <|-- Carro
     Veiculo <|-- Moto
     Veiculo <|-- Caminhao
