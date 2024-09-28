@@ -14,5 +14,6 @@ public class Main {
         System.out.println(ConsoleColors.BLUE_BOLD + locadora.getNome() + ConsoleColors.RESET);
 
         MenuPrincipal.mostrarMenuPrincipal();
+        MenuPrincipal.fecharScanner();
     }
 }

@@ -43,4 +43,8 @@ public abstract class MenuPrincipal {
             }
         }
     }
+
+    public static void fecharScanner() {
+        input.close();
+    }
 }
