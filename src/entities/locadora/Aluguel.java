@@ -11,9 +11,9 @@ public class Aluguel {
     private Veiculo veiculo;
     private LocalDate dataAluguel;
     private LocalDate dataDevolucao;
-    private String localAluguel;
-    private String localDevolucao;
-    private boolean isDevolvido;
+    private Agencia localAluguel;
+    private Agencia localDevolucao;
+    //private boolean isDevolvido;
 
 
     public Aluguel(Cliente cliente, Veiculo veiculo, LocalDate dataAluguel, String localAluguel){
@@ -21,14 +21,14 @@ public class Aluguel {
         this.veiculo = veiculo;
         this.dataAluguel = dataAluguel;
         this.localAluguel = localAluguel;
-        this.isDevolvido = false;
+        //this.isDevolvido = false;
     }
 
 
 
 
     public void alugarVeiculo(){
-        if(!veiculo.isDisponivel()){
+        if(!veiculo.disponivel()){
 
             throw new IllegalArgumentException("Este veículo não está disponível!");
 
@@ -41,7 +41,7 @@ public class Aluguel {
     public void devolverVeiculo(LocalDate dataDevolucao, String localDevolucao){
         this.dataDevolucao = dataDevolucao;
         this.localDevolucao = localDevolucao;
-        this.isDevolvido = true;
+        //this.isDevolvido = true;
         veiculo.alteraDisponibilidade();
     }
 
@@ -53,8 +53,7 @@ public class Aluguel {
                 + "Cliente - " + cliente.getNome() + "\n"
                 + "Veículo - " + veiculo.getModelo() + "\n"
                 + "Data do Aluguel - " + dataAluguel + "\n"
-                + "Local do Aluguel - " + localAluguel + "\n"
-                + "Devolução - " + (isDevolvido ? "Sim" : "Não") + "\n";
+                + "Local do Aluguel - " + localAluguel + "\n";
 
     }
 
