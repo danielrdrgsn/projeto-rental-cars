@@ -59,11 +59,15 @@ classDiagram
 ## Fluxograma - Menus
 ```mermaid
 flowchart TD
-    A[Início] --> B(Menu Principal)
-    B --> C{Tipo de Usuário}
+    A((Início)) --> B(Menu Principal)
+    B --> C{Usuário}
     C -- Adm --> D(Menu Adm)
     C -- Cliente --> E(Menu Cliente)
     D -- CRUD --> F(Clientes)
     D -- CRUD --> G(Agências)
     D -- CRUD --> H(Veículos)
+    E --> I(Alugar Veículo)
+    E --> J(Devolver Veículo)
+    E --> K(Gerar Comprovante)
+    E --> L(Ver Histórico)
 ```
