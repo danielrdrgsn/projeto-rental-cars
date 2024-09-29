@@ -5,15 +5,19 @@ classDiagram
     Usuario <|-- Cliente
     Cliente <|-- PessoaFisica
     Cliente <|-- PessoaJuridica
-    Usuario : +Integer id
-    Usuario : +String nome
-    Usuario: +String email
-    Usuario: +TipoUsuario tipo
     
+    class Usuario {
+        <<abstract>>
+        +Integer id
+        +String nome
+        +String email
+        +TipoUsuario tipo
+    }
     class Administrador{
       +Integer numeroRegistro
     }
     class Cliente{
+        <<abstract>>
       +Integer idCliente
     }
     class PessoaFisica{
@@ -32,13 +36,17 @@ classDiagram
     Veiculo <|-- Carro
     Veiculo <|-- Moto
     Veiculo <|-- Caminhao
-    Veiculo : +String placa
-    Veiculo: +String modelo
-    Veiculo: +int anoFabricacao
-    Veiculo: +String cor
-    Veiculo: +TipovEICULO tipo
-    Veiculo: +Boolean disponivel
-    Veiculo: +Integer numeroAgencia
+    
+    class Veiculo {
+        <<abstract>>
+        +String placa
+        +String modelo
+        +int anoFabricacao
+        +String cor
+        +TipovEICULO tipo
+        +Boolean disponivel
+        +Integer numeroAgencia
+    }
     
     class Carro{
       +Integer numeroRegistro
