@@ -2,7 +2,7 @@ package entities.veiculo;
 
 import java.util.Objects;
 
-public abstract class Veiculo implements Comparable<Veiculo> {
+public class Veiculo implements Comparable<Veiculo> {
     private String placa; // ID
     private String modelo;
     private int anoFabricacao;
@@ -11,7 +11,7 @@ public abstract class Veiculo implements Comparable<Veiculo> {
     private boolean disponivel;
     private Integer numeroAgencia;
 
-    public Veiculo(String placa, String modelo, int ano, String cor, boolean disponivel, Integer numeroAgencia) {
+    public Veiculo(String placa, String modelo, int ano, boolean disponivel) {
         this.placa = placa;
         this.modelo = modelo;
         this.anoFabricacao = ano;
@@ -128,4 +128,6 @@ public abstract class Veiculo implements Comparable<Veiculo> {
             case CAMINHAO -> new Caminhao(placa, modelo, ano, cor, disponivel, numeroAgencia);
         };
     };
+
+
 }

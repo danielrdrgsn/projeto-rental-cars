@@ -1,5 +1,6 @@
 package services;
 
+import entities.agencia.Agencia;
 import entities.locadora.Locadora;
 import entities.usuario.*;
 import repositories.UsuarioRepository;
@@ -11,7 +12,12 @@ import java.util.Scanner;
 
 public class UsuarioService {
 
-    private static final UsuarioRepository usuarioRepository = new UsuarioRepository();
+    private static final UsuarioRepository usuarioRepository = new UsuarioRepository() {
+        @Override
+        public void editar(Agencia agencia, String email) {
+
+        }
+    };
 
     public static void adicionar(Scanner input) {
 
@@ -83,19 +89,19 @@ public class UsuarioService {
                 throw new RuntimeException(e.getMessage());
             }
             administrador.setNumeroRegistro(novoRegistro != null ? novoRegistro : registroAntigo);
-            usuarioRepository.editar(usuario, email);
+            usuarioRepository.editar(usuario, email, usuario);
         } else if (usuario instanceof PessoaFisica pessoaFisica) {
             System.out.println("Digite o novo CPF ou tecle <ENTER> para manter o mesmo: ");
             String novoCpf = input.nextLine();
             String cpfAntigo = pessoaFisica.getCpf();
             pessoaFisica.setCpf(novoCpf.isEmpty() ? cpfAntigo : novoCpf);
-            usuarioRepository.editar(pessoaFisica, email);
+            usuarioRepository.editar(pessoaFisica, email, usuario);
         } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
             System.out.println("Digite o novo CNPJ ou tecle <ENTER> para manter o mesmo: ");
             String novoCnpj = input.nextLine();
             String cnpjAntigo = pessoaJuridica.getCnpj();
             pessoaJuridica.setCnpj(novoCnpj.isEmpty() ? cnpjAntigo : novoCnpj);
-            usuarioRepository.editar(pessoaJuridica, email);
+            usuarioRepository.editar(pessoaJuridica, email, usuario);
         }
     }
 

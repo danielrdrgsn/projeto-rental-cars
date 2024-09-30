@@ -5,13 +5,13 @@ import java.util.Objects;
 public class Endereco {
 
     private String logradouro;
-    private Integer numero;
+    private String numero;
     private String complemento;
     private String cidade;
     private String estado;
     private String cep;
 
-    public Endereco(String logradouro, Integer numero, String complemento, String cidade, String estado, String cep) {
+    public Endereco(String logradouro, String numero, String complemento, String cidade, String estado, String cep) {
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;
@@ -19,6 +19,7 @@ public class Endereco {
         this.estado = estado;
         this.cep = cep;
     }
+
 
     public String getLogradouro() {
         return logradouro;
@@ -28,7 +29,7 @@ public class Endereco {
         this.logradouro = logradouro;
     }
 
-    public Integer getNumero() {
+    public String getNumero() {
         return numero;
     }
 
@@ -40,7 +41,7 @@ public class Endereco {
         this.complemento = complemento;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

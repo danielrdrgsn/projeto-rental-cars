@@ -1,5 +1,6 @@
 package repositories;
 
+import entities.agencia.Agencia;
 import entities.locadora.Locadora;
 import entities.usuario.Administrador;
 import entities.usuario.PessoaFisica;
@@ -10,7 +11,7 @@ import utils.persistencia.LocadoraUtils;
 import java.io.IOException;
 import java.util.List;
 
-public class UsuarioRepository implements Repositorio<Usuario, String> {
+public abstract class UsuarioRepository implements Repositorio<Usuario, String> {
     @Override
     public void adicionar(Usuario usuario) {
         Locadora.getUsuarios().add(usuario);
@@ -22,17 +23,17 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
     }
 
     @Override
-    public void editar(Usuario usuario, String email) {
+    public void editar(Usuario agencia, String email, Object usuario) {
         try {
             LocadoraUtils.carregarDadosLocadora();
-            Usuario antigo = buscar(email);
+            Usuario antigo = buscar(String.valueOf(email));
             int index = Locadora.getUsuarios().indexOf(antigo);
             if(index != -1) {
                 Usuario editado = Locadora.getUsuarios().get(index);
-                editado.setNome(usuario.getNome());
-                editado.setEmail(usuario.getEmail());
+                editado.setNome(agencia.getNome());
+                editado.setEmail(agencia.getEmail());
                 if (editado instanceof Administrador adminUser) {
-                    adminUser.setNumeroRegistro(((Administrador) usuario).getNumeroRegistro());
+                    ((Administrador) editado).setNumeroRegistro(adminUser.getNumeroRegistro());
                 } else if (editado instanceof PessoaFisica pessoaFisica) {
                     pessoaFisica.setCpf(((PessoaFisica) usuario).getCpf());
                 } else if (editado instanceof PessoaJuridica pessoaJuridica) {
@@ -58,6 +59,11 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return null;
+    }
+
+    @Override
+    public Agencia remover(Integer id) {
         return null;
     }
 
