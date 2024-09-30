@@ -8,6 +8,7 @@ import entities.usuario.Usuario;
 import utils.persistencia.LocadoraUtils;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 public class UsuarioRepository implements Repositorio<Usuario, String> {
@@ -24,7 +25,6 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
     @Override
     public void editar(Usuario usuario, String email) {
         try {
-            LocadoraUtils.carregarDadosLocadora();
             Usuario antigo = buscar(email);
             int index = Locadora.getUsuarios().indexOf(antigo);
             if(index != -1) {
@@ -48,7 +48,6 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
     @Override
     public Usuario remover(Usuario usuario) {
         try {
-            LocadoraUtils.carregarDadosLocadora();
             int index = Locadora.getUsuarios().indexOf(usuario);
             if(index != -1) {
                 Usuario removido = Locadora.getUsuarios().remove(index);
@@ -63,7 +62,6 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
 
     @Override
     public Usuario buscar(String email) {
-        carregaDadosLocadora();
         List<Usuario> usuarios = Locadora.getUsuarios();
         for(Usuario u : usuarios){
             if(u.getEmail().equals(email)){
@@ -73,19 +71,10 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
         return null;
     }
 
-
-
     @Override
     public List<Usuario> listar() {
-        carregaDadosLocadora();
-        return Locadora.getUsuarios();
-    }
-
-    private static void carregaDadosLocadora() {
-        try {
-            LocadoraUtils.carregarDadosLocadora();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        List<Usuario> usuarios = Locadora.getUsuarios();
+        Collections.sort(usuarios);
+        return usuarios;
     }
 }

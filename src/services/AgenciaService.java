@@ -1,8 +1,13 @@
 package services;
 
+import entities.agencia.Agencia;
+import repositories.AgenciaRepository;
+
 import java.util.Scanner;
 
 public class AgenciaService {
+
+    private static final AgenciaRepository agenciaRepository = new AgenciaRepository();
 
 
     public static void adicionar(Scanner input) {
@@ -23,5 +28,9 @@ public class AgenciaService {
 
     public static void listar(Scanner input) {
         //TODO
+    }
+
+    public static Agencia buscarAgencia(Integer codigoAgencia) {
+        return agenciaRepository.buscar(codigoAgencia);
     }
 }

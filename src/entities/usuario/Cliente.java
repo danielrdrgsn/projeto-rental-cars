@@ -19,6 +19,6 @@ public abstract class Cliente extends Usuario {
 
     @Override
     public String toString() {
-        return super.toString() + "," + idCliente;
+        return super.toString() + ";" + idCliente;
     }
 }

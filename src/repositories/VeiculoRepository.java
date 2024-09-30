@@ -1,40 +1,51 @@
 package repositories;
 
-import entities.veiculo.*;
+import entities.locadora.Locadora;
+import entities.veiculo.Veiculo;
+import utils.persistencia.LocadoraUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Objects;
 
 public class VeiculoRepository implements Repositorio<Veiculo, String> {
 
-    private List<Veiculo> veiculos = new ArrayList<>();
-
     @Override
     public void adicionar(Veiculo veiculo) {
-        veiculos.add(veiculo);
+        Locadora.getVeiculos().add(veiculo);
+        try {
+            LocadoraUtils.salvarDadosLocadora();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void editar(Veiculo veiculo, String placa) {
-        for (int i = 0; i < veiculos.size(); i++) {
-            if (veiculos.get(i).getPlaca().equals(placa)) {
-                veiculos.set(i, veiculo);
-                break;
+        try {
+            Veiculo antigo = buscar(placa);
+            int index = Locadora.getVeiculos().indexOf(antigo);
+            if (index != -1) {
+                Veiculo editado = Locadora.getVeiculos().get(index);
+                editado.setPlaca(placa);
+                editado.setCor(veiculo.getCor());
+                LocadoraUtils.salvarDadosLocadora();
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public Veiculo remover(Veiculo veiculo) {
-        if (veiculos.remove(veiculo)) {
-            return veiculo;
-        }
-        return null;
     }
 
     @Override
     public Veiculo buscar(String placa) {
+
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Qual veiculo que voce quer buscar? digite a placa");
+        String placaVeiculo = input.nextLine();
+
         for (Veiculo v : veiculos) {
             if (v.getPlaca().equals(placa)) {
                 return v;
@@ -43,9 +54,14 @@ public class VeiculoRepository implements Repositorio<Veiculo, String> {
         return null;
     }
 
-    @Override
+
+    public void listarVeiculos() {
+        for (Veiculo v : veiculos) {
+            System.out.println(v);
+        }
+    }
+
     public List<Veiculo> listar() {
-        return new ArrayList<>(veiculos);
+        return List.of();
     }
 }
-

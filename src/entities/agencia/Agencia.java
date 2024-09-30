@@ -43,12 +43,12 @@ public class Agencia {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Agencia agencia = (Agencia) o;
-        return Objects.equals(endereco, agencia.endereco);
+        return Objects.equals(codigo, agencia.codigo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(endereco);
+        return Objects.hashCode(codigo);
     }
 
     public String mostrarAgencia() {
@@ -58,15 +58,14 @@ public class Agencia {
 
     @Override
     public String toString() {
-        return codigo + "," +
-                nome + "," + endereco.toString();
+        return codigo + ";" +
+                nome + ";" + endereco.toString();
     }
 
     public static Agencia fromString(String linha) {
-        String[] partes = linha.split(",");
+        String[] partes = linha.split(";");
         Integer codigo = Integer.parseInt(partes[0]);
         String nome = partes[1];
-
         String logradouro = partes[2];
         Integer numero = Integer.parseInt(partes[3]);
         String complemento = partes[4];

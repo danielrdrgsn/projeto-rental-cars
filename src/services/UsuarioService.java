@@ -56,8 +56,8 @@ public class UsuarioService {
 
         System.out.println("Digite um novo email para o usuario ou tecle <ENTER> para manter o mesmo: ");
         String novoEmail  = input.nextLine();
-        Usuario usuarioExistente = usuarioRepository.buscar(novoEmail);
 
+        Usuario usuarioExistente = usuarioRepository.buscar(novoEmail);
         while(usuarioExistente != null && !usuarioExistente.getId().equals(usuario.getId())) {
             System.out.println("Email já cadastrado para outro usuário.");
             System.out.println("Digite um novo email para o usuario ou tecle <ENTER> para manter o mesmo: ");
@@ -110,10 +110,18 @@ public class UsuarioService {
         } else if (usuario instanceof PessoaFisica pessoaFisica) {
             System.out.println("\n" + pessoaFisica.mostrarPF());
         } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
-            System.out.println("\n" + pessoaJuridica.mostrarPJ());;
+            System.out.println("\n" + pessoaJuridica.mostrarPJ());
         } else {
             System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nUsuário não encontrado.\n" + ConsoleColors.RESET);
         }
+    }
+
+    public static Cliente buscarCliente(String email) {
+        Usuario usuario = usuarioRepository.buscar(email);
+        if(usuario instanceof Cliente cliente) {
+            return cliente;
+        }
+        return null;
     }
 
     public static void remover(Scanner input) {
@@ -132,14 +140,13 @@ public class UsuarioService {
 
     public static void listar(Scanner input) {
         List<Usuario> usuarios = usuarioRepository.listar();
-        Collections.sort(usuarios);
 
         int tamanhoPagina = 2; // quantidade de itens por página
         int totalPaginas = (int) Math.ceil((double) usuarios.size() / tamanhoPagina);
         int paginaAtual = 1;
 
         while(true) {
-            exibirPagina(usuarios, paginaAtual, tamanhoPagina);
+            exibirPaginaUsuarios(usuarios, paginaAtual, tamanhoPagina);
             System.out.println("\nPágina " + paginaAtual + " de " + totalPaginas);
             System.out.println("[P] Próxima página | [A] Página anterior | [S] Sair");
 
@@ -156,7 +163,7 @@ public class UsuarioService {
         }
     }
 
-    private static void exibirPagina(List<Usuario> usuarios, int pagina, int tamanhoPagina) {
+    private static void exibirPaginaUsuarios(List<Usuario> usuarios, int pagina, int tamanhoPagina) {
         int inicio = (pagina - 1) * tamanhoPagina;
         int fim = Math.min(inicio + tamanhoPagina, usuarios.size());
 
@@ -166,7 +173,7 @@ public class UsuarioService {
             } else if (usuarios.get(i) instanceof PessoaFisica pessoaFisica) {
                 System.out.println(pessoaFisica.mostrarPF());
             } else if (usuarios.get(i) instanceof PessoaJuridica pessoaJuridica) {
-                System.out.println(pessoaJuridica.mostrarPJ());;
+                System.out.println(pessoaJuridica.mostrarPJ());
             } else {
                 System.out.println("Usuário de tipo desconhecido");
             }

@@ -29,6 +29,6 @@ public class Administrador extends Usuario {
 
     @Override
     public String toString() {
-        return super.toString() + "," + numeroRegistro;
+        return super.toString() + ";" + numeroRegistro;
     }
 }
