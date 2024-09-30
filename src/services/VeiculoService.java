@@ -5,13 +5,14 @@ import entities.veiculo.*;
 import repositories.VeiculoRepository;
 import utils.ConsoleColors;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class VeiculoService {
 
-    private static VeiculoRepository veiculoRepository;
+    private static final VeiculoRepository veiculoRepository = new VeiculoRepository();
 
     public static void adicionar(Scanner input) {
 
@@ -154,6 +155,15 @@ public class VeiculoService {
         }
     }
 
+    private static void exibirPaginaVeiculos(List<Veiculo> veiculos, int pagina, int tamanhoPagina) {
+        int inicio = (pagina - 1) * tamanhoPagina;
+        int fim = Math.min(inicio + tamanhoPagina, veiculos.size());
+
+        for (int i = inicio; i < fim; i++) {
+            veiculos.get(i).mostrarVeiculo();
+        }
+    }
+
     public static void buscarVeiculosPorModelo(Scanner input) {
         System.out.println("Digite o modelo do veículo: ");
         String modelo = input.nextLine();
@@ -173,14 +183,7 @@ public class VeiculoService {
         return veiculoRepository.buscarPorId(codigo);
     }
 
-    protected static void exibirPaginaVeiculos(List<Veiculo> veiculos, int pagina, int tamanhoPagina) {
-        int inicio = (pagina - 1) * tamanhoPagina;
-        int fim = Math.min(inicio + tamanhoPagina, veiculos.size());
 
-        for (int i = inicio; i < fim; i++) {
-            veiculos.get(i).mostrarVeiculo();
-        }
-    }
 
     private static Integer obterUltimoIdVeiculo() {
         Integer ultimoIdVeiculo = -1;

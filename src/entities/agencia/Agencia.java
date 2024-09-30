@@ -66,7 +66,6 @@ public class Agencia {
         String[] partes = linha.split(",");
         Integer codigo = Integer.parseInt(partes[0]);
         String nome = partes[1];
-
         String logradouro = partes[2];
         Integer numero = Integer.parseInt(partes[3]);
         String complemento = partes[4];

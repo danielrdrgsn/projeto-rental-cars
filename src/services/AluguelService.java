@@ -100,6 +100,15 @@ public class AluguelService {
         }
     }
 
+    private static void exibirPaginaVeiculos(List<Veiculo> veiculos, int pagina, int tamanhoPagina) {
+        int inicio = (pagina - 1) * tamanhoPagina;
+        int fim = Math.min(inicio + tamanhoPagina, veiculos.size());
+
+        for (int i = inicio; i < fim; i++) {
+            veiculos.get(i).mostrarVeiculo();
+        }
+    }
+
     public List<Aluguel> listarAlugueis() {
         return aluguelRepository.buscarTodos();
     }
