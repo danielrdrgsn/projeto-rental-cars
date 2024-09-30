@@ -6,6 +6,7 @@ import utils.persistencia.LocadoraUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -74,7 +75,9 @@ public class VeiculoRepository implements Repositorio<Veiculo, String> {
     }
 
     public List<Veiculo> listar() {
-        return Locadora.getVeiculos();
+        List<Veiculo> veiculos = Locadora.getVeiculos();
+        Collections.sort(veiculos);
+        return veiculos;
     }
 
     public Veiculo buscarPorId(Integer codigo) {
@@ -85,5 +88,16 @@ public class VeiculoRepository implements Repositorio<Veiculo, String> {
             }
         }
         return null;
+    }
+
+    public List<Veiculo> bucarVeiculosDisponiveis() {
+        List<Veiculo> resultado = new ArrayList<>();
+        for(Veiculo v:Locadora.getVeiculos()) {
+            if(v.isDisponivel()) {
+                resultado.add(v);
+            }
+        }
+        Collections.sort(resultado);
+        return resultado;
     }
 }

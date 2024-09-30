@@ -10,14 +10,16 @@ public abstract class Veiculo implements Comparable<Veiculo> {
     private String cor;
     protected TipoVeiculo tipo;
     private boolean disponivel;
+    private Integer codAgenciaAtual;
 
-    public Veiculo(Integer id, String placa, String modelo, int ano, String cor, boolean disponivel) {
+    public Veiculo(Integer id, String placa, String modelo, int ano, String cor, boolean disponivel, Integer codAgenciaAtual) {
         this.id = id;
         this.placa = placa;
         this.modelo = modelo;
         this.anoFabricacao = ano;
         this.cor = cor;
         this.disponivel = disponivel;
+        this.codAgenciaAtual = codAgenciaAtual;
     }
 
     public Integer getId() {
@@ -72,6 +74,14 @@ public abstract class Veiculo implements Comparable<Veiculo> {
         this.disponivel = disponivel;
     }
 
+    public Integer getCodAgenciaAtual() {
+        return codAgenciaAtual;
+    }
+
+    public void setCodAgenciaAtual(Integer codAgenciaAtual) {
+        this.codAgenciaAtual = codAgenciaAtual;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -96,7 +106,8 @@ public abstract class Veiculo implements Comparable<Veiculo> {
                 "Modelo: " + modelo + "\n" +
                 "Ano: " + anoFabricacao + "\n" +
                 "Cor: " + cor + "\n" +
-                "Tipo: " + tipo.getDescricao() + "\n";
+                "Tipo: " + tipo.getDescricao() + "\n" +
+                "Cod. Agência atual: " + codAgenciaAtual + "\n";
     }
 
     @Override
@@ -107,7 +118,8 @@ public abstract class Veiculo implements Comparable<Veiculo> {
                 + anoFabricacao + ","
                 + cor + ","
                 + tipo + ","
-                + disponivel;
+                + disponivel + ","
+                + codAgenciaAtual;
     }
 
     public static Veiculo fromString(String linha) {
@@ -119,11 +131,12 @@ public abstract class Veiculo implements Comparable<Veiculo> {
         String cor = partes[4];
         TipoVeiculo tipo = TipoVeiculo.valueOf(partes[5]);
         boolean disponivel = Boolean.parseBoolean(partes[6]);
+        Integer codAgenciaAtual = Integer.parseInt(partes[7]);
 
         return switch(tipo) {
-            case CARRO    -> new Carro(id, placa, modelo, ano, cor, disponivel);
-            case MOTO     -> new Moto(id, placa, modelo, ano, cor, disponivel);
-            case CAMINHAO -> new Caminhao(id, placa, modelo, ano, cor, disponivel);
+            case CARRO    -> new Carro(id, placa, modelo, ano, cor, disponivel, codAgenciaAtual);
+            case MOTO     -> new Moto(id, placa, modelo, ano, cor, disponivel, codAgenciaAtual);
+            case CAMINHAO -> new Caminhao(id, placa, modelo, ano, cor, disponivel, codAgenciaAtual);
         };
     };
 }

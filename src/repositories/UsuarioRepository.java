@@ -8,6 +8,7 @@ import entities.usuario.Usuario;
 import utils.persistencia.LocadoraUtils;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 public class UsuarioRepository implements Repositorio<Usuario, String> {
@@ -72,6 +73,8 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
 
     @Override
     public List<Usuario> listar() {
-        return Locadora.getUsuarios();
+        List<Usuario> usuarios = Locadora.getUsuarios();
+        Collections.sort(usuarios);
+        return usuarios;
     }
 }

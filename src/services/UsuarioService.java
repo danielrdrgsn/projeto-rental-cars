@@ -140,7 +140,6 @@ public class UsuarioService {
 
     public static void listar(Scanner input) {
         List<Usuario> usuarios = usuarioRepository.listar();
-        Collections.sort(usuarios);
 
         int tamanhoPagina = 2; // quantidade de itens por página
         int totalPaginas = (int) Math.ceil((double) usuarios.size() / tamanhoPagina);

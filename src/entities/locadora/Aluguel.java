@@ -34,7 +34,7 @@ public class Aluguel {
         this.valorAluguel = BigDecimal.ZERO;
     }
 
-    private BigDecimal calcularValorTotal() {
+    public BigDecimal calcularValorTotal() {
         if(dataDevolucao == null) {
             dataDevolucao = LocalDateTime.now();
         }
@@ -68,7 +68,7 @@ public class Aluguel {
         }
     }
 
-    private long calcularDiasAlugados() {
+    public long calcularDiasAlugados() {
         return ChronoUnit.DAYS.between(dataRetirada, dataDevolucao);
     }
 

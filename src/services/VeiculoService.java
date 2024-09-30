@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class VeiculoService {
 
-    private static final VeiculoRepository veiculoRepository = new VeiculoRepository();
+    private static VeiculoRepository veiculoRepository;
 
     public static void adicionar(Scanner input) {
         System.out.println("Digite a placa do veiculo: ");
@@ -158,7 +158,7 @@ public class VeiculoService {
         return veiculoRepository.buscarPorId(codigo);
     }
 
-    private static void exibirPaginaVeiculos(List<Veiculo> veiculos, int pagina, int tamanhoPagina) {
+    protected static void exibirPaginaVeiculos(List<Veiculo> veiculos, int pagina, int tamanhoPagina) {
         int inicio = (pagina - 1) * tamanhoPagina;
         int fim = Math.min(inicio + tamanhoPagina, veiculos.size());
 
@@ -176,4 +176,9 @@ public class VeiculoService {
         }
         return ultimoIdVeiculo;
     }
+
+    public static List<Veiculo> buscarVeiculosDisponiveis() {
+        return veiculoRepository.bucarVeiculosDisponiveis();
+    }
+
 }
