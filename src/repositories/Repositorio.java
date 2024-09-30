@@ -1,7 +1,5 @@
 package repositories;
 
-import entities.usuario.Usuario;
-
 import java.util.List;
 
 public interface Repositorio<T, I> {

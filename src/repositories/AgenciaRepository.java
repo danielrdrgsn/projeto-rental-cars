@@ -15,8 +15,6 @@ public class AgenciaRepository implements Repositorio<Agencia, Integer> {
         Locadora.getAgencias().add(agencia);
     }
 
-
-
     @Override
     public void editar(Agencia agencia, Integer codAgencia) {
         try {

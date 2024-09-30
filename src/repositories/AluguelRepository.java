@@ -12,6 +12,4 @@ public interface AluguelRepository {
     List<Aluguel> buscarTodos();
     List<Aluguel> buscarPorCliente(Cliente cliente);
     List<Aluguel> buscarPorVeiculo(Veiculo veiculo);
-
-
 }

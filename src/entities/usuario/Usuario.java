@@ -17,10 +17,6 @@ public abstract class Usuario implements Comparable<Usuario> {
         this.email = email;
     }
 
-    public Usuario() {
-
-    }
-
     public Integer getId() {
         return id;
     }

@@ -16,7 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
-import static services.VeiculoService.*;
+import static services.VeiculoService.buscarVeiculo;
+import static services.VeiculoService.buscarVeiculosDisponiveis;
 
 public class AluguelService {
 

@@ -40,12 +40,7 @@ public class VeiculoRepository implements Repositorio<Veiculo, String> {
 
     @Override
     public Veiculo buscar(String placa) {
-
-        Scanner input = new Scanner(System.in);
-
-        System.out.println("Qual veiculo que voce quer buscar? digite a placa");
-        String placaVeiculo = input.nextLine();
-
+        List<Veiculo> veiculos = Locadora.getVeiculos();
         for (Veiculo v : veiculos) {
             if (v.getPlaca().equals(placa)) {
                 return v;
@@ -54,14 +49,55 @@ public class VeiculoRepository implements Repositorio<Veiculo, String> {
         return null;
     }
 
-
-    public void listarVeiculos() {
-        for (Veiculo v : veiculos) {
-            System.out.println(v);
+    public Veiculo remover(Veiculo veiculo) {
+        try {
+            int index = Locadora.getVeiculos().indexOf(veiculo);
+            if (index != -1) {
+                Veiculo removido = Locadora.getVeiculos().remove(index);
+                LocadoraUtils.salvarDadosLocadora();
+                return removido;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+        return null;
+    }
+
+    public List<Veiculo> buscarPorModelo(String modelo) {
+        List<Veiculo> veiculos = Locadora.getVeiculos();
+        List<Veiculo> resultado = new ArrayList<>();
+        for (Veiculo v : veiculos) {
+            if(v.getModelo().contains(modelo)) {
+                resultado.add(v);
+            }
+        }
+        return resultado;
     }
 
     public List<Veiculo> listar() {
-        return List.of();
+        List<Veiculo> veiculos = Locadora.getVeiculos();
+        Collections.sort(veiculos);
+        return veiculos;
+    }
+
+    public Veiculo buscarPorId(Integer codigo) {
+        List<Veiculo> veiculos = Locadora.getVeiculos();
+        for (Veiculo v : veiculos) {
+            if (Objects.equals(v.getId(), codigo)) {
+                return v;
+            }
+        }
+        return null;
+    }
+
+    public List<Veiculo> bucarVeiculosDisponiveis() {
+        List<Veiculo> resultado = new ArrayList<>();
+        for(Veiculo v:Locadora.getVeiculos()) {
+            if(v.isDisponivel()) {
+                resultado.add(v);
+            }
+        }
+        Collections.sort(resultado);
+        return resultado;
     }
 }

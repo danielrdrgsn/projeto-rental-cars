@@ -1,23 +1,16 @@
 package services;
 
-import entities.agencia.Agencia;
 import entities.locadora.Locadora;
 import entities.usuario.*;
 import repositories.UsuarioRepository;
 import utils.ConsoleColors;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class UsuarioService {
 
-    private static final UsuarioRepository usuarioRepository = new UsuarioRepository() {
-        @Override
-        public void editar(Agencia agencia, String email) {
-
-        }
-    };
+    private static final UsuarioRepository usuarioRepository = new UsuarioRepository();
 
     public static void adicionar(Scanner input) {
 
@@ -89,19 +82,19 @@ public class UsuarioService {
                 throw new RuntimeException(e.getMessage());
             }
             administrador.setNumeroRegistro(novoRegistro != null ? novoRegistro : registroAntigo);
-            usuarioRepository.editar(usuario, email, usuario);
+            usuarioRepository.editar(usuario, email);
         } else if (usuario instanceof PessoaFisica pessoaFisica) {
             System.out.println("Digite o novo CPF ou tecle <ENTER> para manter o mesmo: ");
             String novoCpf = input.nextLine();
             String cpfAntigo = pessoaFisica.getCpf();
             pessoaFisica.setCpf(novoCpf.isEmpty() ? cpfAntigo : novoCpf);
-            usuarioRepository.editar(pessoaFisica, email, usuario);
+            usuarioRepository.editar(pessoaFisica, email);
         } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
             System.out.println("Digite o novo CNPJ ou tecle <ENTER> para manter o mesmo: ");
             String novoCnpj = input.nextLine();
             String cnpjAntigo = pessoaJuridica.getCnpj();
             pessoaJuridica.setCnpj(novoCnpj.isEmpty() ? cnpjAntigo : novoCnpj);
-            usuarioRepository.editar(pessoaJuridica, email, usuario);
+            usuarioRepository.editar(pessoaJuridica, email);
         }
     }
 
@@ -248,7 +241,7 @@ public class UsuarioService {
         Integer ultimoID = -1;
         for(Usuario u : Locadora.getUsuarios()) {
             if(u.getId() > ultimoID) {
-                    ultimoID = u.getId();
+                ultimoID = u.getId();
             }
         }
         return ultimoID;
