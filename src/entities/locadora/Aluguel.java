@@ -1,26 +1,39 @@
 package entities.locadora;
 
+import entities.agencia.Agencia;
 import entities.usuario.Cliente;
 import entities.veiculo.Veiculo;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public class Aluguel {
 
+    private Integer id;
     private Cliente cliente;
     private Veiculo veiculo;
-    private LocalDate dataAluguel; // Pra termos horário, LocalDateTime
-    private LocalDate dataDevolucao;
-    private String localAluguel; // locais de devolução => Agencia
-    private String localDevolucao;
-    private boolean isDevolvido; // pensando em SOLID, esse atributo é do Veiculo
+    private LocalDateTime dataRetirada;
+    private LocalDateTime dataDevolucao;
+    private Agencia localRetirada;
+    private Agencia localDevolucao;
+    private BigDecimal valorAluguel;
 
-    public Aluguel(Cliente cliente, Veiculo veiculo, LocalDate dataAluguel, String localAluguel) {
+    public Aluguel(Integer id, Cliente cliente, Veiculo veiculo,
+                   LocalDateTime dataRetirada, LocalDateTime dataDevolucao,
+                   Agencia localRetirada, Agencia localDevolucao,
+                   BigDecimal valorAluguel) {
+        this.id = id;
         this.cliente = cliente;
         this.veiculo = veiculo;
-        this.dataAluguel = dataAluguel;
-        this.localAluguel = localAluguel;
-        this.isDevolvido = false;
+        this.dataRetirada = LocalDateTime.now();
+        this.dataDevolucao = dataDevolucao;
+        this.localRetirada = localRetirada;
+        this.localDevolucao = localDevolucao;
+        this.valorAluguel = calcularValorAluguel();
+    }
+
+    private BigDecimal calcularValorAluguel() {
+        return new BigDecimal(0);
     }
 
     public void alugarVeiculo() {
@@ -30,30 +43,27 @@ public class Aluguel {
         veiculo.alteraDisponibilidade();
     }
 
-    public void devolverVeiculo(LocalDate dataDevolucao, String localDevolucao) {
-        this.dataDevolucao = dataDevolucao;
-        this.localDevolucao = localDevolucao;
-        this.isDevolvido = true;
-        veiculo.alteraDisponibilidade();
+    public void devolverVeiculo(Veiculo veiculo) {
+        this.veiculo.alteraDisponibilidade();
     }
 
     public String gerarComprovanteDeAluguel() {
         return "Comprovante de Aluguel: \n"
                 + "Cliente - " + cliente.getNome() + "\n"
                 + "Veículo - " + veiculo.getModelo() + "\n"
-                + "Data do Aluguel - " + dataAluguel + "\n"
-                + "Local do Aluguel - " + localAluguel + "\n"
-                + "Devolução - " + (isDevolvido ? "Sim" : "Não") + "\n";
+                + "Data do Aluguel - " + dataRetirada + "\n"
+                + "Local do Aluguel - " + localRetirada + "\n";
     }
 
     public String gerarComprovanteDeDevolucao() {
         return "Comprovante de Devolução: \n"
                 + "Cliente - " + cliente.getNome() + "\n"
                 + "Veículo - " + veiculo.getModelo() + "\n"
-                + "Data do Aluguel - " + dataAluguel + "\n"
+                + "Data do Aluguel - " + dataRetirada + "\n"
                 + "Data de Devolução - " + dataDevolucao + "\n"
                 + "Local de Devolução - " + localDevolucao + "\n"
                 + "Total de Dias Alugados - " + calcularDiasAlugados() + "dias" + "\n";
+
     }
 
     public long calcularDiasAlugados() {
@@ -71,23 +81,19 @@ public class Aluguel {
         return veiculo;
     }
 
-    public LocalDate getDataAluguel() {
-        return dataAluguel;
+    public LocalDateTime getDataAluguel() {
+        return dataRetirada;
     }
 
-    public LocalDate getDataDevolucao() {
+    public LocalDateTime getDataDevolucao() {
         return dataDevolucao;
     }
 
-    public String getLocalAluguel() {
-        return localAluguel;
+    public Agencia getLocalAluguel() {
+        return localRetirada;
     }
 
-    public String getLocalDevolucao() {
+    public Agencia getLocalDevolucao() {
         return localDevolucao;
-    }
-
-    public boolean isDevolvido() {
-        return isDevolvido;
     }
 }

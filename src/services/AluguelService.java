@@ -16,8 +16,7 @@ public class AluguelService {
         this.aluguelRepository = aluguelRepository;
     }
 
-
-    public void alugarVeiculo(Cliente cliente, Veiculo veiculo, LocalDate dataAluguel, String localAluguel){
+    public void alugarVeiculo(Cliente cliente, Veiculo veiculo, LocalDate dataAluguel, String localAluguel) {
 
         Aluguel novoAluguel = new Aluguel(cliente, veiculo, dataAluguel, localAluguel);
 
@@ -28,23 +27,20 @@ public class AluguelService {
         System.out.println(novoAluguel.gerarComprovanteDeAluguel());
     }
 
-
-    public void devolverVeiculo(Aluguel aluguel, LocalDate dataDevolucao, String localDevolucao){
+    public void devolverVeiculo(Aluguel aluguel, LocalDate dataDevolucao, String localDevolucao) {
         aluguel.devolverVeiculo(dataDevolucao, localDevolucao);
         System.out.println(aluguel.gerarComprovanteDeDevolucao());
     }
 
-    public List<Aluguel> listarAlugueis(){
+    public List<Aluguel> listarAlugueis() {
         return aluguelRepository.buscarTodos();
     }
 
-    public List<Aluguel> buscarAlugueisPorCliente(Cliente cliente){
+    public List<Aluguel> buscarAlugueisPorCliente(Cliente cliente) {
         return aluguelRepository.buscarPorCliente(cliente);
     }
 
-    public List<Aluguel> buscarAlugueisPorVeiculo(Veiculo veiculo){
+    public List<Aluguel> buscarAlugueisPorVeiculo(Veiculo veiculo) {
         return aluguelRepository.buscarPorVeiculo(veiculo);
     }
-
-
 }
