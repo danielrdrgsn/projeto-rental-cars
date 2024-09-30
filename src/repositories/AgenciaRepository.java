@@ -1,12 +1,11 @@
 package repositories;
+
+import entities.agencia.Agencia;
 import java.util.ArrayList;
 import java.util.List;
 
-import entities.agencia.Agencia;
-
 public abstract class AgenciaRepository implements Repositorio<Agencia, Integer> {
-    private List<Agencia> agencias = new ArrayList<>();
-
+    private final List<Agencia> agencias = new ArrayList<>();
 
     @Override
     public void adicionar(Agencia agencia) {
@@ -14,30 +13,28 @@ public abstract class AgenciaRepository implements Repositorio<Agencia, Integer>
     }
 
     @Override
-    public void editar(Agencia agencia, String email) {
-        Agencia agenciaExistente = buscar(String.valueOf(email));
-        if (agenciaExistente != null) {
-            agenciaExistente.setNome(agencia.getNome());
-            agenciaExistente.setEndereco(agencia.getEndereco());
-        }
+    public Agencia remover(Agencia agencia) {
+        return null;
     }
-
 
     @Override
     public Agencia remover(Integer id) {
         Agencia agencia = buscar(id);
         if (agencia != null) {
-            listar().remove(agencia);
+            agencias.remove(agencia);
         }
         return agencia;
     }
 
     @Override
-    public Agencia buscar(String email) {
+    public Agencia buscar(Integer id) {
+        for (Agencia agencia : agencias) {
+            if (agencia.getCodigo().equals(id)) {
+                return agencia;
+            }
+        }
         return null;
     }
-
-    public abstract Agencia buscar(Integer id);
 
     @Override
     public List<Agencia> listar() {

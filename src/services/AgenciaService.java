@@ -4,17 +4,15 @@ import utils.persistencia.LocadoraUtils;
 import java.io.IOException;
 import entities.agencia.Agencia;
 import entities.agencia.Endereco;
-import entities.usuario.Usuario;
 import repositories.AgenciaRepository;
-import repositories.AgenciaRepositoryImpl;
 
 import java.util.Scanner;
 
 public class AgenciaService {
 
-    private static final AgenciaRepository agenciaRepository = new AgenciaRepositoryImpl() {
+    private static final AgenciaRepository agenciaRepository = new AgenciaRepository() {
         @Override
-        public void editar(Usuario agencia, String email, Object usuario) {
+        public void editar(Agencia t, Integer id) {
 
         }
     };
