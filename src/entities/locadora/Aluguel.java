@@ -25,12 +25,14 @@ public class Aluguel {
     private Agencia localDevolucao;
     private BigDecimal valorAluguel;
 
-    public Aluguel(Integer id, Cliente cliente, Veiculo veiculo, LocalDateTime dataRetirada, Agencia localRetirada) {
+    public Aluguel(Integer id, Cliente cliente, Veiculo veiculo, LocalDateTime dataRetirada, LocalDateTime dataDevolucao, Agencia localRetirada, Agencia localDevolucao, BigDecimal valorAluguel) {
         this.id = id;
         this.cliente = cliente;
         this.veiculo = veiculo;
         this.dataRetirada = dataRetirada;
+        this.dataDevolucao = dataDevolucao;
         this.localRetirada = localRetirada;
+        this.localDevolucao = localDevolucao;
         this.valorAluguel = BigDecimal.ZERO;
     }
 
@@ -39,6 +41,7 @@ public class Aluguel {
             dataDevolucao = LocalDateTime.now();
         }
         long qtidadeDias = calcularDiasAlugados();
+        if(qtidadeDias < 0) qtidadeDias *= -1;
 
         switch (cliente.getTipoUsuario()) {
             case PF -> {
@@ -152,27 +155,27 @@ public class Aluguel {
                 "Veiculo: " + veiculo.getModelo() + "\n" +
                 "Data de retirada: " + dataRetirada.format(formatter) + "\n" +
                 "Local retirada: " + localRetirada.getNome() + "\n" +
-                "Data de devolução: " + (dataDevolucao != null ? dataDevolucao.format(formatter) : "Em andamento") + "\n" +
-                "Local devolucao: " + (localDevolucao != null ? localDevolucao.getNome() : "Em andamento") + "\n" +
-                "Valor do aluguel: R$ " + (valorAluguel != null ? NumberFormatter.valorBigDecimalToString(valorAluguel) : "Em andamento") + "\n";
+                "Data de devolução: " + dataDevolucao.format(formatter) + "\n" +
+                "Local devolucao: " + localDevolucao.getNome() + "\n" +
+                "Valor do aluguel: R$ " + NumberFormatter.valorBigDecimalToString(valorAluguel) + "\n";
     }
 
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        return    id + ","
-                + cliente.getEmail() + ","
-                + veiculo.getPlaca() + ","
-                + dataRetirada.format(formatter) + ","
-                + dataDevolucao.format(formatter) + ","
-                + localRetirada.getCodigo() + ","
-                + localDevolucao.getCodigo() + ","
+        return    id + ";"
+                + cliente.getEmail() + ";"
+                + veiculo.getPlaca() + ";"
+                + dataRetirada.format(formatter) + ";"
+                + dataDevolucao.format(formatter) + ";"
+                + localRetirada.getCodigo() + ";"
+                + localDevolucao.getCodigo() + ";"
                 + NumberFormatter.valorBigDecimalToString(valorAluguel);
     }
 
     public static Aluguel fromString(String linha) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        String[] partes = linha.split(",");
+        String[] partes = linha.split(";");
         Integer id = Integer.parseInt(partes[0]);
         String emailCliente = partes[1];
         String placaVeiculo = partes[2];
@@ -187,23 +190,6 @@ public class Aluguel {
         Agencia agenciaRetirada = AgenciaService.buscarAgencia(codigoLocalRetirada);
         Agencia agenciaDevolucao = AgenciaService.buscarAgencia(codigoLocalDevolucao);
 
-        Aluguel aluguel = new Aluguel(id, cliente, veiculo, dataRetirada, agenciaRetirada);
-
-        aluguel.setValorAluguel(valorAluguel);
-
-        if(cliente != null) {
-            aluguel.setCliente(cliente);
-        }
-        if(veiculo != null) {
-            aluguel.setVeiculo(veiculo);
-        }
-        if(agenciaRetirada != null) {
-            aluguel.setLocalRetirada(agenciaRetirada);
-        }
-        if(agenciaDevolucao != null) {
-            aluguel.setLocalDevolucao(agenciaDevolucao);
-        }
-
-        return aluguel;
+        return new Aluguel(id, cliente, veiculo, dataRetirada, dataDevolucao, agenciaRetirada, agenciaDevolucao, valorAluguel);
     }
 }

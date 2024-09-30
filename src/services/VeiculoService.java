@@ -91,7 +91,7 @@ public class VeiculoService {
             novaPlaca = input.nextLine();
             veiculoExistente = veiculoRepository.buscar(novaPlaca);
         }
-        veiculo.setPlaca(novaPlaca);
+        veiculo.setPlaca(novaPlaca.isEmpty()? placaAtual : novaPlaca);
 
         System.out.println("Digite a nova cor ou tecle <ENTER> para manter a mesma: ");
         String novaCor = input.nextLine();
@@ -133,14 +133,13 @@ public class VeiculoService {
 
     public static void listar(Scanner input) {
         List<Veiculo> veiculos = veiculoRepository.listar();
-        Collections.sort(veiculos);
 
         int tamanhoPagina = 2; // quantidade de veiculos por página
         int totalPaginas = (int) Math.ceil((double) veiculos.size() / tamanhoPagina);
         int paginaAtual = 1;
 
         while(true) {
-            exibirPaginaVeiculos(veiculos, paginaAtual, totalPaginas);
+            exibirPaginaVeiculos(veiculos, paginaAtual, tamanhoPagina);
             System.out.println("\nPágina " + paginaAtual + " de " + totalPaginas);
             System.out.println("[P] Próxima página | [A] Página anterior | [S] Sair");
 
@@ -162,7 +161,7 @@ public class VeiculoService {
         int fim = Math.min(inicio + tamanhoPagina, veiculos.size());
 
         for (int i = inicio; i < fim; i++) {
-            veiculos.get(i).mostrarVeiculo();
+            System.out.println(veiculos.get(i).mostrarVeiculo());
         }
     }
 

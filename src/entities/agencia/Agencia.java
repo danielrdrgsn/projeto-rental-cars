@@ -58,12 +58,12 @@ public class Agencia {
 
     @Override
     public String toString() {
-        return codigo + "," +
-                nome + "," + endereco.toString();
+        return codigo + ";" +
+                nome + ";" + endereco.toString();
     }
 
     public static Agencia fromString(String linha) {
-        String[] partes = linha.split(",");
+        String[] partes = linha.split(";");
         Integer codigo = Integer.parseInt(partes[0]);
         String nome = partes[1];
         String logradouro = partes[2];

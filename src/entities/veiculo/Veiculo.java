@@ -112,18 +112,18 @@ public abstract class Veiculo implements Comparable<Veiculo> {
 
     @Override
     public String toString() {
-        return    id + ","
-                + placa + ","
-                + modelo + ","
-                + anoFabricacao + ","
-                + cor + ","
-                + tipo + ","
-                + disponivel + ","
+        return    id + ";"
+                + placa + ";"
+                + modelo + ";"
+                + anoFabricacao + ";"
+                + cor + ";"
+                + tipo + ";"
+                + disponivel + ";"
                 + codAgenciaAtual;
     }
 
     public static Veiculo fromString(String linha) {
-        String[] partes = linha.split(",");
+        String[] partes = linha.split(";");
         Integer id = Integer.parseInt(partes[0]);
         String placa = partes[1];
         String modelo = partes[2];

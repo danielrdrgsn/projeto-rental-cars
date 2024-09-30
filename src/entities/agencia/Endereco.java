@@ -97,11 +97,11 @@ public class Endereco {
 
     @Override
     public String toString() {
-        return logradouro + "," +
-               numero + "," +
-               complemento + "," +
-               cidade + "," +
-               estado + "," +
+        return logradouro + ";" +
+               numero + ";" +
+               complemento + ";" +
+               cidade + ";" +
+               estado + ";" +
                cep;
     }
 }

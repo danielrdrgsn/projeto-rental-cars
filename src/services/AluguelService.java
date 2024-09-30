@@ -8,8 +8,11 @@ import entities.usuario.Usuario;
 import entities.veiculo.Veiculo;
 import repositories.AluguelRepositoryImplementacao;
 import utils.ConsoleColors;
+import utils.NumberFormatter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
@@ -17,8 +20,7 @@ import static services.VeiculoService.*;
 
 public class AluguelService {
 
-    private static AluguelRepositoryImplementacao aluguelRepository;
-
+    private static final AluguelRepositoryImplementacao aluguelRepository = new AluguelRepositoryImplementacao();
 
     public static void alugarVeiculo(Scanner input, Usuario usuario) {
         Cliente cliente = (Cliente) usuario;
@@ -33,11 +35,20 @@ public class AluguelService {
         escolhido.setDisponivel(false);
 
         Agencia localRetirada = AgenciaService.buscarAgencia(escolhido.getCodAgenciaAtual());
+        System.out.println("Digite o código da agência de devolução: "); // TODO: validar agência
+        Integer codAgenciaDevolucao = input.nextInt();
+        input.nextLine();
+        Agencia localDevolucao = AgenciaService.buscarAgencia(codAgenciaDevolucao);
+
+        System.out.println("Digite a data e hora de devolução no formato <dd/MM/yyyy>:"); // TODO: validar data e hora de devolução
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        LocalDateTime dataDevolucao = LocalDateTime.parse(input.nextLine() + " 00:00:00", formatter);
 
         Integer novoIdAluguel = obterUltimoIdAluguel() + 1;
 
-        Aluguel novoAluguel = new Aluguel(novoIdAluguel, cliente, escolhido, LocalDateTime.now(), localRetirada);
-
+        Aluguel novoAluguel = new Aluguel(novoIdAluguel, cliente, escolhido, LocalDateTime.now(),
+                                    dataDevolucao, localRetirada, localDevolucao, BigDecimal.ZERO);
+        novoAluguel.setValorAluguel(novoAluguel.calcularValorTotal());
 
         aluguelRepository.salvarAluguel(novoAluguel);
         System.out.println(gerarComprovanteDeAluguel(novoAluguel));
@@ -57,7 +68,7 @@ public class AluguelService {
             for(Aluguel aluguel : alugueis) {
                 if(aluguel.getCliente().equals(cliente)) {
                     devolvido.setDisponivel(true);
-                    System.out.println(gerarComprovanteDeDevolucao(aluguel));
+                    System.out.println(gerarExtratoDetalhado(aluguel));
                     break;
                 }
             }
@@ -105,7 +116,7 @@ public class AluguelService {
         int fim = Math.min(inicio + tamanhoPagina, veiculos.size());
 
         for (int i = inicio; i < fim; i++) {
-            veiculos.get(i).mostrarVeiculo();
+            System.out.println(veiculos.get(i).mostrarVeiculo());
         }
     }
 
@@ -123,8 +134,12 @@ public class AluguelService {
 
     public static void mostrarComprovanteDevolucoes(Scanner input, Cliente cliente) {
         List<Aluguel> alugueis = aluguelRepository.buscarPorCliente(cliente);
-        for (Aluguel aluguel : alugueis) {
-            System.out.println(gerarComprovanteDeDevolucao(aluguel));
+        if(alugueis.isEmpty()) {
+            System.out.println("Não há aluguéis para mostrar.");
+        } else {
+            for (Aluguel aluguel : alugueis) {
+                System.out.println(gerarExtratoDetalhado(aluguel));
+            }
         }
     }
 
@@ -136,15 +151,17 @@ public class AluguelService {
                 + "Local de retirada: " + aluguel.getLocalRetirada().getNome() + "\n";
     }
 
-    public static String gerarComprovanteDeDevolucao(Aluguel aluguel) {
-        return "|> Comprovante de Devolução: \n"
+    public static String gerarExtratoDetalhado(Aluguel aluguel) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        return "|> Extrato detalhado: \n"
                 + "ID: " + aluguel.getId() + "\n"
                 + "Cliente: " + aluguel.getCliente().getNome() + "\n"
                 + "Veículo: " + aluguel.getVeiculo().getModelo() + "\n"
-                + "Data do Aluguel: " + aluguel.getDataRetirada() + "\n"
-                + "Data de Devolução: " + aluguel.getDataDevolucao() + "\n"
-                + "Local de Devolução: " + aluguel.getLocalDevolucao().getNome() + "\n"
-                + "Total de Dias Alugados: " + aluguel.calcularDiasAlugados() + "dias" + "\n"
-                + "Valor total do aluguel: " + aluguel.calcularValorTotal() + "\n";
+                + "Data do aluguel: " + aluguel.getDataRetirada().format(formatter) + "\n"
+                + "Local de retirada: " + aluguel.getLocalRetirada().getNome() + "\n"
+                + "Data de devolução: " + aluguel.getDataDevolucao().format(formatter) + "\n"
+                + "Local de devolução: " + aluguel.getLocalDevolucao().getNome() + "\n"
+                + "Total de dias alugados: " + aluguel.calcularDiasAlugados() + " dias" + "\n"
+                + "Valor total do aluguel: R$ " + NumberFormatter.valorBigDecimalToString(aluguel.calcularValorTotal()) + "\n";
     }
 }

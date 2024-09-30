@@ -72,14 +72,14 @@ public abstract class Usuario implements Comparable<Usuario> {
 
     @Override
     public String toString() {
-        return id + ","
-                + nome + ","
-                + email + ","
+        return id + ";"
+                + nome + ";"
+                + email + ";"
                 + tipoUsuario;
     }
 
     public static Usuario fromString(String linha) {
-        String[] partes = linha.split(",");
+        String[] partes = linha.split(";");
         Integer id = Integer.parseInt(partes[0]);
         String nome = partes[1];
         String email = partes[2];

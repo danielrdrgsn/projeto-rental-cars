@@ -12,7 +12,7 @@ import static services.AluguelService.*;
 
 public abstract class MenuCliente {
 
-    private static UsuarioRepository usuarioRepository;
+    private static final UsuarioRepository usuarioRepository = new UsuarioRepository();
 
     public static void mostrarMenuCliente(Scanner input) {
         boolean ativo = true;
@@ -36,6 +36,7 @@ public abstract class MenuCliente {
 
             try {
                 opcao = input.nextInt();
+                input.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println(ConsoleColors.RED_BOLD + "Opção inválida. Apenas valores numéricos são aceitos." + ConsoleColors.RESET);
                 ativo = false;
@@ -45,7 +46,10 @@ public abstract class MenuCliente {
             switch (opcao) {
                 case 1 -> alugarVeiculo(input, usuario);
                 case 2 -> devolverVeiculo(input, usuario);
-                case 3 -> mostrarComprovanteDevolucoes(input, ((Cliente) usuario));
+                case 3 -> {
+                    mostrarComprovanteDevolucoes(input, ((Cliente) usuario));
+                    ativo = false;
+                }
                 case 4 -> ativo = false;
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
