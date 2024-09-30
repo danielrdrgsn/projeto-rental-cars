@@ -1,30 +1,22 @@
 package entities.agencia;
 
-import entities.usuario.Usuario;
-
 import java.util.Objects;
 
-public class Agencia extends Usuario {
+public class Agencia {
 
-    private Integer codigo;
+    private final Integer codigo;
     private String nome;
     private Endereco endereco; // ID
-    private String email;
 
     public Agencia(Integer codigo, String nome, Endereco endereco) {
         super();
         this.codigo = codigo;
         this.nome = nome;
         this.endereco = endereco;
-
     }
 
     public Integer getCodigo() {
         return codigo;
-    }
-
-    public void setCodigo(Integer codigo) {
-        this.codigo = codigo;
     }
 
     public String getNome() {
@@ -80,10 +72,5 @@ public class Agencia extends Usuario {
         Endereco endereco = new Endereco(logradouro, numero, complemento, cidade, estado, cep);
 
         return new Agencia(codigo, nome, endereco);
-    }
-
-
-    public String getEmail() {
-        return this.email;
     }
 }

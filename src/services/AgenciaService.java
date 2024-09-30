@@ -1,23 +1,17 @@
 package services;
 
-import utils.persistencia.LocadoraUtils;
-import java.io.IOException;
 import entities.agencia.Agencia;
 import entities.agencia.Endereco;
-import entities.usuario.Usuario;
 import repositories.AgenciaRepository;
-import repositories.AgenciaRepositoryImpl;
+import utils.persistencia.LocadoraUtils;
 
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class AgenciaService {
 
-    private static final AgenciaRepository agenciaRepository = new AgenciaRepositoryImpl() {
-        @Override
-        public void editar(Usuario agencia, String email, Object usuario) {
-
-        }
-    };
+    private static final AgenciaRepository agenciaRepository = new AgenciaRepository();
 
     public static void listarAgencias() {
         var agencias = agenciaRepository.listar();
@@ -37,7 +31,6 @@ public class AgenciaService {
         }
     }
 
-
     public static Agencia buscarAgencia(Integer codigo) {
         Agencia agencia = agenciaRepository.buscar(codigo);
         if (agencia != null) {
@@ -54,7 +47,6 @@ public class AgenciaService {
         }
         return agencia;
     }
-
 
     public static void adicionarAgencia(Scanner input) {
         System.out.println("Digite o código da agência:");
@@ -128,7 +120,7 @@ public class AgenciaService {
                 agencia.getEndereco().setCep(novoCep);
             }
 
-            agenciaRepository.editar(agencia, String.valueOf(codigo));
+            agenciaRepository.editar(agencia, codigo);
 
             try {
                 LocadoraUtils.salvarDadosLocadora();
@@ -139,28 +131,23 @@ public class AgenciaService {
             System.out.println("Agência não encontrada.");
         }
     }
-
 
     public static void removerAgencia(Scanner input) {
         System.out.println("Digite o código da agência que deseja remover:");
         Integer codigo = input.nextInt();
 
-        Agencia agenciaRemovida = agenciaRepository.remover(codigo);
-        if (agenciaRemovida != null) {
-            System.out.println("Agência removida com sucesso.");
-
-            try {
-                LocadoraUtils.salvarDadosLocadora();
-            } catch (IOException e) {
-                System.out.println("Erro ao salvar os dados: " + e.getMessage());
+        for(Agencia agencia : agenciaRepository.listar()) {
+            if (Objects.equals(agencia.getCodigo(), codigo)) {
+                try {
+                    agenciaRepository.remover(agencia);
+                    System.out.println("Agência removida com sucesso.");
+                    LocadoraUtils.salvarDadosLocadora();
+                    break;
+                } catch (IOException e) {
+                    throw new RuntimeException("Erro ao salvar os dados: " + e.getMessage());
+                }
             }
-        } else {
-            System.out.println("Agência não encontrada.");
         }
+        System.out.println("Agência não encontrada.");
     }
-
-
 }
-
-
-

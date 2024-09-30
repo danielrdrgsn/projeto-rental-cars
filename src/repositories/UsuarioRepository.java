@@ -62,8 +62,7 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
 
     @Override
     public Usuario buscar(String email) {
-        List<Usuario> usuarios = Locadora.getUsuarios();
-        for(Usuario u : usuarios){
+        for(Usuario u : Locadora.getUsuarios()){
             if(u.getEmail().equals(email)){
                 return u;
             }
