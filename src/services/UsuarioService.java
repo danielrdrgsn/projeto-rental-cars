@@ -110,7 +110,7 @@ public class UsuarioService {
         } else if (usuario instanceof PessoaFisica pessoaFisica) {
             System.out.println("\n" + pessoaFisica.mostrarPF());
         } else if (usuario instanceof PessoaJuridica pessoaJuridica) {
-            System.out.println("\n" + pessoaJuridica.mostrarPJ());;
+            System.out.println("\n" + pessoaJuridica.mostrarPJ());
         } else {
             System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nUsuário não encontrado.\n" + ConsoleColors.RESET);
         }
@@ -147,7 +147,7 @@ public class UsuarioService {
         int paginaAtual = 1;
 
         while(true) {
-            exibirPagina(usuarios, paginaAtual, tamanhoPagina);
+            exibirPaginaUsuarios(usuarios, paginaAtual, tamanhoPagina);
             System.out.println("\nPágina " + paginaAtual + " de " + totalPaginas);
             System.out.println("[P] Próxima página | [A] Página anterior | [S] Sair");
 
@@ -164,7 +164,7 @@ public class UsuarioService {
         }
     }
 
-    private static void exibirPagina(List<Usuario> usuarios, int pagina, int tamanhoPagina) {
+    private static void exibirPaginaUsuarios(List<Usuario> usuarios, int pagina, int tamanhoPagina) {
         int inicio = (pagina - 1) * tamanhoPagina;
         int fim = Math.min(inicio + tamanhoPagina, usuarios.size());
 
@@ -174,7 +174,7 @@ public class UsuarioService {
             } else if (usuarios.get(i) instanceof PessoaFisica pessoaFisica) {
                 System.out.println(pessoaFisica.mostrarPF());
             } else if (usuarios.get(i) instanceof PessoaJuridica pessoaJuridica) {
-                System.out.println(pessoaJuridica.mostrarPJ());;
+                System.out.println(pessoaJuridica.mostrarPJ());
             } else {
                 System.out.println("Usuário de tipo desconhecido");
             }

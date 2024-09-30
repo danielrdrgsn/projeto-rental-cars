@@ -1,25 +1,23 @@
 package services;
 
-import entities.veiculo.Veiculo;
+import java.util.Scanner;
 
 public class ClienteService {
 
     private static final VeiculoService veiculoService = new VeiculoService();
     private static final AluguelService aluguelService = new AluguelService();
 
-    public void alugarVeiculo(Integer idVeiculo) {
-        Veiculo veiculo = veiculoService.buscar(idVeiculo);
-        if(veiculo != null || !veiculo.isDisponivel()) {
+    public void alugarVeiculo(Scanner input) {
 
-        }
-        if (!veiculo.isDisponivel()) {
-            throw new IllegalArgumentException("Este veículo não está disponível!");
-        }
-        veiculo.alteraDisponibilidade();
-        aluguelService.mostrarComprovanteAlguel();
+        // TODO: definir um método de busca para saber qual veículo escolher
+        // buscar veículo usando o método escolhido
+        // alugar o veículo escolhido com as informações necessárias de aluguel
+        // gerar comprovanete de aluguel
     }
 
-    public void devolverVeiculo(Veiculo veiculo) {
-        this.veiculo.alteraDisponibilidade();
+    public void devolverVeiculo() {
+        // informar a placa do veículo
+        // alterar a disponibilidade do veículo no sistema
+        // mostrar comprovante de devolução
     }
 }

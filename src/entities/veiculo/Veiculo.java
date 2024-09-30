@@ -68,8 +68,8 @@ public abstract class Veiculo implements Comparable<Veiculo> {
         return disponivel;
     }
 
-    public void alteraDisponibilidade() {
-        this.disponivel = !disponivel;
+    public void setDisponivel(boolean disponivel) {
+        this.disponivel = disponivel;
     }
 
     @Override

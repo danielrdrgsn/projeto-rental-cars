@@ -5,7 +5,9 @@ import entities.veiculo.*;
 import utils.persistencia.LocadoraUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class VeiculoRepository implements Repositorio<Veiculo, String> {
@@ -22,40 +24,23 @@ public class VeiculoRepository implements Repositorio<Veiculo, String> {
 
     @Override
     public void editar(Veiculo veiculo, String placa) {
-
-        Scanner input = new Scanner(System.in);
-
-        System.out.println("Qual o placa do veiculo que voce quer atualizar?");
-        String placaVeiculo = input.nextLine();
-
-        for (Veiculo v : veiculos) {
-            if (placaVeiculo.equals(v.getPlaca())) {
-                System.out.println("Qual a placa do veiculo?");
-                v.setPlaca(placaVeiculo);
-                System.out.println("Qual a modelo do veiculo?");
-                v.setModelo(veiculo.getModelo());
-                System.out.println("Qual a ano de fabricação do veiculo?");
-                v.setAnoFabricacao(veiculo.getAnoFabricacao());
-                System.out.println("Qual a cor do veiculo?");
-                v.setCor(veiculo.getCor());
-                System.out.println("Qual o modelo do veiculo?");
-                v.setModelo(veiculo.getModelo());
+        try {
+            Veiculo antigo = buscar(placa);
+            int index = Locadora.getVeiculos().indexOf(antigo);
+            if (index != -1) {
+                Veiculo editado = Locadora.getVeiculos().get(index);
+                editado.setPlaca(placa);
+                editado.setCor(veiculo.getCor());
+                LocadoraUtils.salvarDadosLocadora();
             }
-        }
-    }
-
-    public void remover(Veiculo veiculo) {
-        Scanner input = new Scanner(System.in);
-        System.out.println("Qual o veiculo que voce quer remover? digite a placa");
-        String placaVeiculo = input.nextLine();
-
-        if (placaVeiculo.equals(veiculo.getPlaca())) {
-            veiculos.remove(veiculo);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public Veiculo buscar(String placa) {
+        List<Veiculo> veiculos = Locadora.getVeiculos();
         for (Veiculo v : veiculos) {
             if (v.getPlaca().equals(placa)) {
                 return v;
@@ -64,16 +49,42 @@ public class VeiculoRepository implements Repositorio<Veiculo, String> {
         return null;
     }
 
-    public Veiculo buscarPorNome(String nome) {
-        for (Veiculo v : veiculos) {
-            if(v.getModelo().contains(nome)) {
-                return v;
+    public Veiculo remover(Veiculo veiculo) {
+        try {
+            int index = Locadora.getVeiculos().indexOf(veiculo);
+            if (index != -1) {
+                Veiculo removido = Locadora.getVeiculos().remove(index);
+                LocadoraUtils.salvarDadosLocadora();
+                return removido;
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
 
+    public List<Veiculo> buscarPorModelo(String modelo) {
+        List<Veiculo> veiculos = Locadora.getVeiculos();
+        List<Veiculo> resultado = new ArrayList<>();
+        for (Veiculo v : veiculos) {
+            if(v.getModelo().contains(modelo)) {
+                resultado.add(v);
+            }
+        }
+        return resultado;
+    }
+
     public List<Veiculo> listar() {
-        return veiculos;
+        return Locadora.getVeiculos();
+    }
+
+    public Veiculo buscarPorId(Integer codigo) {
+        List<Veiculo> veiculos = Locadora.getVeiculos();
+        for (Veiculo v : veiculos) {
+            if (Objects.equals(v.getId(), codigo)) {
+                return v;
+            }
+        }
+        return null;
     }
 }
