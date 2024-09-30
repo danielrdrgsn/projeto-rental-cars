@@ -1,11 +1,13 @@
 package services;
 
 import entities.locadora.Locadora;
-import entities.veiculo.*;
+import entities.veiculo.Caminhao;
+import entities.veiculo.Carro;
+import entities.veiculo.Moto;
+import entities.veiculo.Veiculo;
 import repositories.VeiculoRepository;
 import utils.ConsoleColors;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
