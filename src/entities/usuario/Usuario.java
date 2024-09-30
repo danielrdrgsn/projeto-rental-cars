@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public abstract class Usuario implements Comparable<Usuario> {
 
-    private Integer id;
+    private final Integer id;
     private String nome;
     private String email; // ID
     protected TipoUsuario tipoUsuario;
@@ -19,10 +19,6 @@ public abstract class Usuario implements Comparable<Usuario> {
 
     public Integer getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getNome() {

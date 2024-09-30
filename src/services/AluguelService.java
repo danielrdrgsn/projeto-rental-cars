@@ -43,4 +43,23 @@ public class AluguelService {
     public List<Aluguel> buscarAlugueisPorVeiculo(Veiculo veiculo) {
         return aluguelRepository.buscarPorVeiculo(veiculo);
     }
+
+    public String gerarComprovanteDeAluguel(Aluguel aluguel) {
+        return "Comprovante de Aluguel: \n"
+                + "Cliente - " + cliente.getNome() + "\n"
+                + "Veículo - " + veiculo.getModelo() + "\n"
+                + "Data do Aluguel - " + dataRetirada + "\n"
+                + "Local do Aluguel - " + localRetirada + "\n";
+    }
+
+    public String gerarComprovanteDeDevolucao() {
+        return "Comprovante de Devolução: \n"
+                + "Cliente - " + cliente.getNome() + "\n"
+                + "Veículo - " + veiculo.getModelo() + "\n"
+                + "Data do Aluguel - " + dataRetirada + "\n"
+                + "Data de Devolução - " + dataDevolucao + "\n"
+                + "Local de Devolução - " + localDevolucao + "\n"
+                + "Total de Dias Alugados - " + calcularDiasAlugados() + "dias" + "\n";
+
+    }
 }

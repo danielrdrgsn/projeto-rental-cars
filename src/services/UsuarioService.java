@@ -116,6 +116,14 @@ public class UsuarioService {
         }
     }
 
+    public static Cliente buscarCliente(String email) {
+        Usuario usuario = usuarioRepository.buscar(email);
+        if(usuario instanceof Cliente cliente) {
+            return cliente;
+        }
+        return null;
+    }
+
     public static void remover(Scanner input) {
         System.out.println("Digite o email do usuario: ");
         String email  = input.nextLine(); // TODO: validação de email?

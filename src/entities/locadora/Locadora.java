@@ -1,6 +1,5 @@
 package entities.locadora;
 
-import entities.Aluguel;
 import entities.agencia.Agencia;
 import entities.usuario.Usuario;
 import entities.veiculo.Veiculo;

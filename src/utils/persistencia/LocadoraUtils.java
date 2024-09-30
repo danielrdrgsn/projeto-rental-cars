@@ -1,6 +1,6 @@
 package utils.persistencia;
 
-import entities.Aluguel;
+import entities.locadora.Aluguel;
 import entities.locadora.Locadora;
 import entities.agencia.Agencia;
 import entities.usuario.Usuario;

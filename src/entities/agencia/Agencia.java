@@ -43,12 +43,12 @@ public class Agencia {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Agencia agencia = (Agencia) o;
-        return Objects.equals(endereco, agencia.endereco);
+        return Objects.equals(codigo, agencia.codigo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(endereco);
+        return Objects.hashCode(codigo);
     }
 
     public String mostrarAgencia() {
