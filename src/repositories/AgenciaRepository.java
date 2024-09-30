@@ -12,7 +12,14 @@ public class AgenciaRepository implements Repositorio<Agencia, Integer> {
 
     @Override
     public void adicionar(Agencia agencia) {
-        Locadora.getAgencias().add(agencia);
+        if(!Locadora.getAgencias().contains(agencia)) {
+            Locadora.getAgencias().add(agencia);
+            try {
+                LocadoraUtils.salvarDadosLocadora();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     @Override

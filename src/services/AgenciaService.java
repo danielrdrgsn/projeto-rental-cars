@@ -31,7 +31,10 @@ public class AgenciaService {
         }
     }
 
-    public static Agencia buscarAgencia(Integer codigo) {
+    public static void buscarAgencia(Scanner input) {
+        System.out.println("Digite o código da agência:");
+        Integer codigo = input.nextInt();
+        input.nextLine();
         Agencia agencia = agenciaRepository.buscar(codigo);
         if (agencia != null) {
             System.out.println("==============================================");
@@ -45,7 +48,10 @@ public class AgenciaService {
         } else {
             System.out.println("Agência não encontrada.");
         }
-        return agencia;
+    }
+
+    public static Agencia buscarAgencia(Integer codigo) {
+        return agenciaRepository.buscar(codigo);
     }
 
     public static void adicionarAgencia(Scanner input) {
@@ -72,12 +78,6 @@ public class AgenciaService {
         Agencia agencia = new Agencia(codigo, nome, endereco);
 
         agenciaRepository.adicionar(agencia);
-
-        try {
-            LocadoraUtils.salvarDadosLocadora();
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar os dados: " + e.getMessage());
-        }
     }
 
     public static void editarAgencia(Scanner input) {
@@ -85,7 +85,8 @@ public class AgenciaService {
         Integer codigo = input.nextInt();
         input.nextLine();
 
-        Agencia agencia = buscarAgencia(codigo);
+
+        Agencia agencia = agenciaRepository.buscar(codigo);
         if (agencia != null) {
             System.out.println("Digite o novo nome da agência:");
             String novoNome = input.nextLine();

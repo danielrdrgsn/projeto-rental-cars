@@ -9,7 +9,6 @@ public class Agencia {
     private Endereco endereco; // ID
 
     public Agencia(Integer codigo, String nome, Endereco endereco) {
-        super();
         this.codigo = codigo;
         this.nome = nome;
         this.endereco = endereco;

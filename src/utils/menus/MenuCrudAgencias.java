@@ -6,6 +6,8 @@ import utils.ConsoleColors;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import static services.AgenciaService.*;
+
 public class MenuCrudAgencias {
 
     public static void crudAgencias(Scanner input) {
@@ -25,21 +27,11 @@ public class MenuCrudAgencias {
             }
 
             switch (opcao) {
-                case 1 -> AgenciaService.adicionarAgencia(input);
-                case 2 -> AgenciaService.editarAgencia(input);
-                case 3 -> {
-                    System.out.println("Digite o código da agência:");
-                    Integer codigo = input.nextInt();
-                    input.nextLine();
-                    Agencia agencia = AgenciaService.buscarAgencia(codigo);
-                    if (agencia != null) {
-                        System.out.println("Agência encontrada: " + agencia);
-                    } else {
-                        System.out.println("Agência não encontrada.");
-                    }
-                }
-                case 4 -> AgenciaService.removerAgencia(input);
-                case 5 -> AgenciaService.listarAgencias();
+                case 1 -> adicionarAgencia(input);
+                case 2 -> editarAgencia(input);
+                case 3 -> buscarAgencia(input);
+                case 4 -> removerAgencia(input);
+                case 5 -> listarAgencias();
                 case 6 -> ativo = false;
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
