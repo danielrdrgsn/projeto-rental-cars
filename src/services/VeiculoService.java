@@ -14,39 +14,54 @@ public class VeiculoService {
     private static VeiculoRepository veiculoRepository;
 
     public static void adicionar(Scanner input) {
-        System.out.println("Digite a placa do veiculo: ");
-        String placaVeiculo = input.nextLine();
+
+        System.out.println("Digite o tipo de veículo que deseja cadastrar: ");
+        System.out.println("1. Carro");
+        System.out.println("2. Moto");
+        System.out.println("3. Caminhão");
+        System.out.println("4. Voltar");
+
+        int opcao = input.nextInt();
+        input.nextLine();
+
+        System.out.println("Digite a placa do veículo:");
+        String placa = input.nextLine();
+        Veiculo veiculo = veiculoRepository.buscar(placa);
+
+        while(veiculo != null){
+            System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nPlaca já utilizada por outro veículo.\n" + ConsoleColors.RESET);
+            System.out.println("Digite uma nova placa:");
+            placa = input.nextLine();
+            veiculo = veiculoRepository.buscar(placa);
+        }
 
         System.out.println("Digite o modelo do veiculo: ");
         String modeloVeiculo = input.nextLine();
 
-        System.out.println("Digite o ano do veiculo: ");
+        System.out.println("Digite o ano de fabricação do veiculo: ");
         int anoFabricacao = input.nextInt();
         input.nextLine();
 
         System.out.println("Digite a cor do veiculo: ");
         String corVeiculo = input.nextLine();
 
-        System.out.println("Qual tipo de Veiculo você gostaria:");
-        for (int i = 0; i < TipoVeiculo.values().length; i++) {
-            System.out.println((i + 1) + ". " + TipoVeiculo.values()[i].getDescricao());
-        }
-        int escolhaVeiculo = input.nextInt();
+        System.out.println("Digite o código da agência de origem do veículo: ");
+        Integer codigoAgencia = input.nextInt(); // TODO: validar agencia escolhida
         input.nextLine();
 
         Integer idVeiculo = obterUltimoIdVeiculo() + 1;
 
-        switch (escolhaVeiculo) {
+        switch (opcao) {
             case 1 -> {
-                veiculoRepository.adicionar(new Carro(idVeiculo, placaVeiculo, modeloVeiculo, anoFabricacao, corVeiculo, true));
+                veiculoRepository.adicionar(new Carro(idVeiculo, placa, modeloVeiculo, anoFabricacao, corVeiculo, true, codigoAgencia));
                 System.out.println("Carro cadastrado com sucesso!");
             }
             case 2 -> {
-                veiculoRepository.adicionar(new Moto(idVeiculo, placaVeiculo, modeloVeiculo, anoFabricacao, corVeiculo, true));
+                veiculoRepository.adicionar(new Moto(idVeiculo, placa, modeloVeiculo, anoFabricacao, corVeiculo, true, codigoAgencia));
                 System.out.println("Moto cadastrada com sucesso!");
             }
             case 3 -> {
-                veiculoRepository.adicionar(new Caminhao(idVeiculo, placaVeiculo, modeloVeiculo, anoFabricacao, corVeiculo, true));
+                veiculoRepository.adicionar(new Caminhao(idVeiculo, placa, modeloVeiculo, anoFabricacao, corVeiculo, true, codigoAgencia));
                 System.out.println("Caminhão cadastrado com sucesso!");
             }
             default -> System.out.println("Tipo de veículo desconhecido.");
@@ -54,7 +69,7 @@ public class VeiculoService {
     }
 
     public static void editar(Scanner input) {
-        System.out.println("Qual o placa do veiculo que você quer atualizar?");
+        System.out.println("Digite a placa atual do veículo:");
         String placaAtual = input.nextLine();
         Veiculo veiculo = veiculoRepository.buscar(placaAtual);
 
