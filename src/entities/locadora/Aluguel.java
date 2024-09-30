@@ -29,7 +29,7 @@ public class Aluguel {
         this.id = id;
         this.cliente = cliente;
         this.veiculo = veiculo;
-        this.dataRetirada = LocalDateTime.now();
+        this.dataRetirada = dataRetirada;
         this.localRetirada = localRetirada;
         this.valorAluguel = BigDecimal.ZERO;
     }
@@ -39,13 +39,13 @@ public class Aluguel {
             dataDevolucao = LocalDateTime.now();
         }
         long qtidadeDias = calcularDiasAlugados();
-        // TODO: método para calcular o valor total no momento da devolução do veículo
+
         switch (cliente.getTipoUsuario()) {
             case PF -> {
                 return switch (veiculo.getTipo()) {
                     case CARRO -> {
                         if(qtidadeDias > 5) yield BigDecimal.valueOf((150.00 * qtidadeDias) * 0.95);
-                        yield BigDecimal.valueOf((150.00 * qtidadeDias) * 0.95);
+                        yield BigDecimal.valueOf((150.00 * qtidadeDias));
                     }
                     case MOTO -> BigDecimal.valueOf(100.00 * qtidadeDias);
                     case CAMINHAO -> BigDecimal.valueOf(200.00 * qtidadeDias);
@@ -54,8 +54,8 @@ public class Aluguel {
             case PJ -> {
                 return switch (veiculo.getTipo()) {
                     case CARRO -> {
-                        if(qtidadeDias > 3) yield BigDecimal.valueOf((150.00 * qtidadeDias) * 0.95);
-                        yield BigDecimal.valueOf((150.00 * qtidadeDias) * 0.90);
+                        if(qtidadeDias > 3) yield BigDecimal.valueOf((150.00 * qtidadeDias) * 0.90);
+                        yield BigDecimal.valueOf((150.00 * qtidadeDias));
                     }
                     case MOTO -> BigDecimal.valueOf(100.00 * qtidadeDias);
                     case CAMINHAO -> BigDecimal.valueOf(200.00 * qtidadeDias);
@@ -190,6 +190,7 @@ public class Aluguel {
         Aluguel aluguel = new Aluguel(id, cliente, veiculo, dataRetirada, agenciaRetirada);
 
         aluguel.setValorAluguel(valorAluguel);
+
         if(cliente != null) {
             aluguel.setCliente(cliente);
         }
@@ -197,6 +198,9 @@ public class Aluguel {
             aluguel.setVeiculo(veiculo);
         }
         if(agenciaRetirada != null) {
+            aluguel.setLocalRetirada(agenciaRetirada);
+        }
+        if(agenciaDevolucao != null) {
             aluguel.setLocalDevolucao(agenciaDevolucao);
         }
 

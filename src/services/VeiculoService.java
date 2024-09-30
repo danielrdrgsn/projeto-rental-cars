@@ -80,6 +80,7 @@ public class VeiculoService {
         veiculo.setCor(novaCor.isEmpty() ? veiculo.getCor() : novaCor);
 
         veiculoRepository.editar(veiculo, placaAtual);
+        System.out.println("Veículo editado com sucesso!");
     }
 
     public void alteraDisponibilidade(Veiculo veiculo) {
@@ -139,7 +140,14 @@ public class VeiculoService {
     }
 
     public static void buscarVeiculosPorModelo(Scanner input) {
+        System.out.println("Digite o modelo do veículo: ");
+        String modelo = input.nextLine();
 
+        List<Veiculo> veiculos = veiculoRepository.buscarPorModelo(modelo);
+        Collections.sort(veiculos);
+        for(Veiculo veiculo : veiculos) {
+            System.out.println(veiculo.mostrarVeiculo());
+        }
     }
 
     public static Veiculo buscarVeiculo(String placa) {

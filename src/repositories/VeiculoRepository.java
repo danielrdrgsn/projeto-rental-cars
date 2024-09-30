@@ -1,14 +1,13 @@
 package repositories;
 
 import entities.locadora.Locadora;
-import entities.veiculo.*;
+import entities.veiculo.Veiculo;
 import utils.persistencia.LocadoraUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Scanner;
 
 public class VeiculoRepository implements Repositorio<Veiculo, String> {
 
