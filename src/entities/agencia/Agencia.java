@@ -1,17 +1,22 @@
 package entities.agencia;
 
+import entities.usuario.Usuario;
+
 import java.util.Objects;
 
-public class Agencia {
+public class Agencia extends Usuario {
 
     private Integer codigo;
     private String nome;
     private Endereco endereco; // ID
+    private String email;
 
     public Agencia(Integer codigo, String nome, Endereco endereco) {
+        super();
         this.codigo = codigo;
         this.nome = nome;
         this.endereco = endereco;
+
     }
 
     public Integer getCodigo() {
@@ -67,7 +72,7 @@ public class Agencia {
         Integer codigo = Integer.parseInt(partes[0]);
         String nome = partes[1];
         String logradouro = partes[2];
-        Integer numero = Integer.parseInt(partes[3]);
+        String numero = partes[3];
         String complemento = partes[4];
         String cidade = partes[5];
         String estado = partes[6];
@@ -75,5 +80,10 @@ public class Agencia {
         Endereco endereco = new Endereco(logradouro, numero, complemento, cidade, estado, cep);
 
         return new Agencia(codigo, nome, endereco);
+    }
+
+
+    public String getEmail() {
+        return this.email;
     }
 }
