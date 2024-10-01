@@ -31,7 +31,7 @@ public class VeiculoService {
         String placa = input.nextLine();
         Veiculo veiculo = veiculoRepository.buscar(placa);
 
-        while(veiculo != null){
+        while (veiculo != null) {
             System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nPlaca já utilizada por outro veículo.\n" + ConsoleColors.RESET);
             System.out.println("Digite uma nova placa:");
             placa = input.nextLine();
@@ -76,7 +76,7 @@ public class VeiculoService {
         String placaAtual = input.nextLine();
         Veiculo veiculo = veiculoRepository.buscar(placaAtual);
 
-        if(veiculo == null) {
+        if (veiculo == null) {
             System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nVeículo não encontrado.\n" + ConsoleColors.RESET);
             return;
         }
@@ -85,13 +85,13 @@ public class VeiculoService {
         String novaPlaca = input.nextLine();
 
         Veiculo veiculoExistente = veiculoRepository.buscar(novaPlaca);
-        while(veiculoExistente != null && !veiculoExistente.getPlaca().equals(placaAtual)) {
+        while (veiculoExistente != null && !veiculoExistente.getPlaca().equals(placaAtual)) {
             System.out.println("Placa já utilizada por outro veículo.");
             System.out.println("Digite a nova placa para o veículo ou tecle <ENTER> para manter a mesma: ");
             novaPlaca = input.nextLine();
             veiculoExistente = veiculoRepository.buscar(novaPlaca);
         }
-        veiculo.setPlaca(novaPlaca.isEmpty()? placaAtual : novaPlaca);
+        veiculo.setPlaca(novaPlaca.isEmpty() ? placaAtual : novaPlaca);
 
         System.out.println("Digite a nova cor ou tecle <ENTER> para manter a mesma: ");
         String novaCor = input.nextLine();
@@ -124,7 +124,7 @@ public class VeiculoService {
 
         Veiculo veiculo = veiculoRepository.buscar(placaVeiculo);
         veiculo = veiculoRepository.remover(veiculo);
-        if(veiculo != null) {
+        if (veiculo != null) {
             System.out.println("Veículo removido com sucesso.");
         } else {
             System.out.println("Veículo não encontrado.");
@@ -138,7 +138,7 @@ public class VeiculoService {
         int totalPaginas = (int) Math.ceil((double) veiculos.size() / tamanhoPagina);
         int paginaAtual = 1;
 
-        while(true) {
+        while (true) {
             exibirPaginaVeiculos(veiculos, paginaAtual, tamanhoPagina);
             System.out.println("\nPágina " + paginaAtual + " de " + totalPaginas);
             System.out.println("[P] Próxima página | [A] Página anterior | [S] Sair");
@@ -171,7 +171,7 @@ public class VeiculoService {
 
         List<Veiculo> veiculos = veiculoRepository.buscarPorModelo(modelo);
         Collections.sort(veiculos);
-        for(Veiculo veiculo : veiculos) {
+        for (Veiculo veiculo : veiculos) {
             System.out.println(veiculo.mostrarVeiculo());
         }
     }
@@ -183,7 +183,6 @@ public class VeiculoService {
     public static Veiculo buscarVeiculo(Integer codigo) {
         return veiculoRepository.buscarPorId(codigo);
     }
-
 
 
     private static Integer obterUltimoIdVeiculo() {

@@ -55,7 +55,7 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
                 return removido;
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao salvar os dados da locadora.", e);
         }
         return null;
     }
