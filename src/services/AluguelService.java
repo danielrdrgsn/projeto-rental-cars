@@ -32,18 +32,40 @@ public class AluguelService {
         System.out.println("ID escolhido: ");
         Integer idVeiculo = input.nextInt();
         input.nextLine();
-        Veiculo escolhido = buscarVeiculo(idVeiculo); // TODO: validar escolha
+        Veiculo escolhido = buscarVeiculo(idVeiculo);
+        if(escolhido == null){
+            System.out.println("O veículo não foi encontrado, tente novamente!");
+            return;
+        }
         escolhido.setDisponivel(false);
 
         Agencia localRetirada = AgenciaService.buscarAgencia(escolhido.getCodAgenciaAtual());
-        System.out.println("Digite o código da agência de devolução: "); // TODO: validar agência
+        System.out.println("Digite o código da agência de devolução: ");
         Integer codAgenciaDevolucao = input.nextInt();
         input.nextLine();
         Agencia localDevolucao = AgenciaService.buscarAgencia(codAgenciaDevolucao);
+        if(localDevolucao == null){
+            System.out.println("A agência de devolução não foi encontrada, tente novamente!");
+            return;
+        }
 
-        System.out.println("Digite a data e hora de devolução no formato <dd/MM/yyyy>:"); // TODO: validar data e hora de devolução
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime dataDevolucao = LocalDateTime.parse(input.nextLine() + " 00:00:00", formatter);
+
+        System.out.println("Digite a data e hora de devolução no formato <dd/MM/yyyy>:");
+        LocalDateTime dataDevolucao;
+
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            dataDevolucao = LocalDateTime.parse(input.nextLine() + " 00:00:00", formatter);
+
+            if(dataDevolucao.isBefore(LocalDateTime.now())){
+                System.out.println("A data de devolução não pode ser anterior a data atual.");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("A data não é válida, tente novamente!");
+            return;
+        }
+
 
         Integer novoIdAluguel = obterUltimoIdAluguel() + 1;
 
