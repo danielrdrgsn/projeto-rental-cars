@@ -5,6 +5,8 @@ import entities.locadora.Locadora;
 import utils.persistencia.LocadoraUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,13 +14,11 @@ public class AgenciaRepository implements Repositorio<Agencia, Integer> {
 
     @Override
     public void adicionar(Agencia agencia) {
-        if(!Locadora.getAgencias().contains(agencia)) {
-            Locadora.getAgencias().add(agencia);
-            try {
-                LocadoraUtils.salvarDadosLocadora();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        Locadora.getAgencias().add(agencia);
+        try {
+            LocadoraUtils.salvarDadosLocadora();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -26,15 +26,13 @@ public class AgenciaRepository implements Repositorio<Agencia, Integer> {
     public void editar(Agencia agencia, Integer codAgencia) {
         try {
             Agencia antiga = buscar(codAgencia);
-            int index = Locadora.getAgencias().indexOf(antiga);
-            if (index != -1) {
-                Agencia editado = Locadora.getAgencias().get(index);
-                editado.setNome(agencia.getNome());
-                editado.setEndereco(agencia.getEndereco());
+            if (antiga != null) {
+                antiga.setNome(agencia.getNome());
+                antiga.setEndereco(agencia.getEndereco());
                 LocadoraUtils.salvarDadosLocadora();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao salvar os dados da locadora.", e);
         }
     }
 
@@ -55,8 +53,8 @@ public class AgenciaRepository implements Repositorio<Agencia, Integer> {
 
     @Override
     public Agencia buscar(Integer id) {
-        for(Agencia agencia : Locadora.getAgencias()) {
-            if(Objects.equals(agencia.getCodigo(), id)) {
+        for (Agencia agencia : Locadora.getAgencias()) {
+            if (Objects.equals(agencia.getCodigo(), id)) {
                 return agencia;
             }
         }
@@ -65,6 +63,28 @@ public class AgenciaRepository implements Repositorio<Agencia, Integer> {
 
     @Override
     public List<Agencia> listar() {
-        return Locadora.getAgencias();
+        List<Agencia> agencias = Locadora.getAgencias();
+        Collections.sort(agencias);
+        return agencias;
+    }
+
+    public List<Agencia> buscarNome(String nome) {
+        List<Agencia> agencias = Locadora.getAgencias();
+        List<Agencia> resultado = new ArrayList<>();
+        for (Agencia agencia : agencias) {
+            if (agencia.getNome().contains(nome) || agencia.getEndereco().getLogradouro().contains(nome)) {
+                resultado.add(agencia);
+            }
+        }
+        return resultado;
+    }
+
+    public boolean existeAgenciaComMesmosDados(Agencia agencia) {
+        for (Agencia ag : Locadora.getAgencias()) {
+            if (ag.equals(agencia)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
