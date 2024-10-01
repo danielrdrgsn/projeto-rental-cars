@@ -8,6 +8,7 @@ import entities.usuario.Usuario;
 import utils.persistencia.LocadoraUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,6 +70,19 @@ public class UsuarioRepository implements Repositorio<Usuario, String> {
         }
         return null;
     }
+
+    public static List<Usuario> buscarPorParteDoNome(String parteDoNome) {
+        List<Usuario> usuariosEncontrados = new ArrayList<>();
+        for (Usuario usuario : Locadora.getUsuarios()) {
+            if (usuario.getNome().toLowerCase().contains(parteDoNome.toLowerCase())) {
+                usuariosEncontrados.add(usuario);
+            }
+        }
+        return usuariosEncontrados;
+    }
+
+
+
 
     @Override
     public List<Usuario> listar() {

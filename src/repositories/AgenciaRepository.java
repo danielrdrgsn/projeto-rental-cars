@@ -68,7 +68,7 @@ public class AgenciaRepository implements Repositorio<Agencia, Integer> {
         return agencias;
     }
 
-    public List<Agencia> buscarNome(String nome) {
+    public static List<Agencia> buscarPorParteDoNome(String nome) {
         List<Agencia> agencias = Locadora.getAgencias();
         List<Agencia> resultado = new ArrayList<>();
         for (Agencia agencia : agencias) {

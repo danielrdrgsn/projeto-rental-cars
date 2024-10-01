@@ -51,6 +51,18 @@ public class AgenciaService {
         }
     }
 
+    public static void buscarAgenciaPorParteDoNome(Scanner input){
+        System.out.println("Digite uma parte do nome da agência: ");
+        String parteNome = input.nextLine();
+
+        List<Agencia> agencias = AgenciaRepository.buscarPorParteDoNome(parteNome);
+
+        for(Agencia agencia : agencias){
+            System.out.println(agencia.mostrarAgencia());
+            System.out.println("==============================================");
+        }
+    }
+
     public static Agencia buscarAgencia(Integer codigo) {
         return agenciaRepository.buscar(codigo);
     }
