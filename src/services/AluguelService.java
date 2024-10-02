@@ -111,6 +111,8 @@ public class AluguelService {
         System.out.println("Digite a placa do veículo que está sendo devolvido: ");
         String placa = input.nextLine();
         Veiculo devolvido = buscarVeiculo(placa);
+
+
         if(devolvido.isDisponivel()){
             System.out.println("Não é possível devolver um veículo que não foi alugado!");
             return;
