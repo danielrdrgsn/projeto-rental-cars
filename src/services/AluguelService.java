@@ -29,27 +29,76 @@ public class AluguelService {
         System.out.println("Escolha o ID do veículo:");
         mostrarVeiculosDisponiveis(input);
 
-        System.out.println("ID escolhido: ");
-        Integer idVeiculo = input.nextInt();
+        Integer idVeiculo = null;
+
+        while (idVeiculo == null){
+            System.out.println("ID escolhido: ");
+            if(input.hasNextInt()){
+                idVeiculo = input.nextInt();
+            }else{
+                System.out.println("Apenas números inteiros são válidos para o ID do veículo.");
+                input.nextLine();
+            }
+        }
         input.nextLine();
-        Veiculo escolhido = buscarVeiculo(idVeiculo); // TODO: validar escolha
-        VeiculoService.alteraDisponibilidade(escolhido);
+
+        Veiculo escolhido = buscarVeiculo(idVeiculo);
+        if(escolhido == null){
+            System.out.println("O veículo não foi encontrado, tente novamente!");
+            return;
+        }
+
+        if(!escolhido.isDisponivel()){
+            System.out.println("O veículo já está alugado. Tente novamente com outro veículo!");
+            return;
+        }
 
         Agencia localRetirada = AgenciaService.buscarAgencia(escolhido.getCodAgenciaAtual());
-        System.out.println("Digite o código da agência de devolução: "); // TODO: validar agência
-        Integer codAgenciaDevolucao = input.nextInt();
-        input.nextLine();
-        Agencia localDevolucao = AgenciaService.buscarAgencia(codAgenciaDevolucao);
 
-        System.out.println("Digite a data e hora de devolução no formato <dd/MM/yyyy>:"); // TODO: validar data e hora de devolução
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        LocalDateTime dataDevolucao = LocalDateTime.parse(input.nextLine() + " 00:00:00", formatter);
+        Integer codAgenciaDevolucao = null;
+        while (codAgenciaDevolucao == null){
+            System.out.println("Digite o código da agência de devolução: ");
+            if(input.hasNextInt()){
+                codAgenciaDevolucao = input.nextInt();
+            }else{
+                System.out.println("Apenas números inteiros são válidos para agência.");
+                input.nextLine();
+            }
+        }
+
+        input.nextLine();
+
+        Agencia localDevolucao = AgenciaService.buscarAgencia(codAgenciaDevolucao);
+        if(localDevolucao == null){
+            System.out.println("A agência de devolução não foi encontrada, tente novamente!");
+            return;
+        }
+
+
+        System.out.println("Digite a data e hora de devolução no formato <dd/MM/yyyy>:");
+        LocalDateTime dataDevolucao;
+
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            dataDevolucao = LocalDateTime.parse(input.nextLine() + " 00:00:00", formatter);
+
+            if(dataDevolucao.isBefore(LocalDateTime.now())){
+                System.out.println("A data de devolução não pode ser anterior a data atual.");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println("A data não é válida, tente novamente!");
+            return;
+        }
+
 
         Integer novoIdAluguel = obterUltimoIdAluguel() + 1;
 
         Aluguel novoAluguel = new Aluguel(novoIdAluguel, cliente, escolhido, LocalDateTime.now(),
                                     dataDevolucao, localRetirada, localDevolucao, BigDecimal.ZERO);
         novoAluguel.setValorAluguel(novoAluguel.calcularValorTotal());
+
+        escolhido.setDisponivel(false);
 
         aluguelRepository.salvarAluguel(novoAluguel);
         System.out.println(gerarComprovanteDeAluguel(novoAluguel));
@@ -62,6 +111,12 @@ public class AluguelService {
         System.out.println("Digite a placa do veículo que está sendo devolvido: ");
         String placa = input.nextLine();
         Veiculo devolvido = buscarVeiculo(placa);
+
+
+        if(devolvido.isDisponivel()){
+            System.out.println("Não é possível devolver um veículo que não foi alugado!");
+            return;
+        }
         if(devolvido == null) {
             System.out.println("Veículo não encontrado.");
         } else {

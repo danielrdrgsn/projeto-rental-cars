@@ -218,6 +218,17 @@ public class UsuarioService {
         return null;
     }
 
+    public static void buscarPorParteDoNome(Scanner input){
+        System.out.println("Digite uma parte do nome do usuário: ");
+        String parteNome = input.nextLine();
+
+        List<Usuario> usuarios = UsuarioRepository.buscarPorParteDoNome(parteNome);
+
+        for(Usuario usuario : usuarios){
+            System.out.println(usuario.mostrarUsuario());
+        }
+    }
+
     public static void remover(Scanner input) {
         System.out.println("Digite o email do usuário: ");
         String email = input.nextLine();

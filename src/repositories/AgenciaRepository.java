@@ -68,11 +68,11 @@ public class AgenciaRepository implements Repositorio<Agencia, Integer> {
         return agencias;
     }
 
-    public List<Agencia> buscarNome(String nome) {
+    public static List<Agencia> buscarPorParteDoNome(String nome) {
         List<Agencia> agencias = Locadora.getAgencias();
         List<Agencia> resultado = new ArrayList<>();
         for (Agencia agencia : agencias) {
-            if (agencia.getNome().contains(nome) || agencia.getEndereco().getLogradouro().contains(nome)) {
+            if (agencia.getNome().toLowerCase().contains(nome.toLowerCase()) || agencia.getEndereco().getLogradouro().toLowerCase().contains(nome.toLowerCase())) {
                 resultado.add(agencia);
             }
         }

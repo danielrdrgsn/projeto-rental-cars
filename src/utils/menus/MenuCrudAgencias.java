@@ -30,9 +30,10 @@ public class MenuCrudAgencias {
                 case 1 -> adicionarAgencia(input);
                 case 2 -> editarAgencia(input);
                 case 3 -> buscarAgencia(input);
-                case 4 -> removerAgencia(input);
-                case 5 -> listarAgencias();
-                case 6 -> ativo = false;
+                case 4 -> buscarAgenciaPorParteDoNome(input);
+                case 5 -> removerAgencia(input);
+                case 6 -> listarAgencias();
+                case 7 -> ativo = false;
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
         }
@@ -45,9 +46,10 @@ public class MenuCrudAgencias {
         System.out.println("| 01 - Cadastrar Agência                     |");
         System.out.println("| 02 - Editar Agência                        |");
         System.out.println("| 03 - Buscar Agência                        |");
-        System.out.println("| 04 - Remover Agência                       |");
-        System.out.println("| 05 - Listar Agências                       |");
-        System.out.println("| 06 - Voltar ao Menu Anterior               |");
+        System.out.println("| 04 - Buscar Agência por Nome ou Logradouro |");
+        System.out.println("| 05 - Remover Agência                       |");
+        System.out.println("| 06 - Listar Agências                       |");
+        System.out.println("| 07 - Voltar ao Menu Anterior               |");
         System.out.println("==============================================");
         System.out.print("Opção escolhida: ");
     }

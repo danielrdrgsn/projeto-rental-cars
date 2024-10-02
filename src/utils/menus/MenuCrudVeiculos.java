@@ -30,9 +30,10 @@ public class MenuCrudVeiculos {
                 case 1 -> adicionar(input);
                 case 2 -> editar(input);
                 case 3 -> buscar(input);
-                case 4 -> remover(input);
-                case 5 -> listar(input);
-                case 6 -> ativo = false;
+                case 4 -> buscarVeiculosPorModelo(input);
+                case 5 -> remover(input);
+                case 6 -> listar(input);
+                case 7 -> ativo = false;
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
         }

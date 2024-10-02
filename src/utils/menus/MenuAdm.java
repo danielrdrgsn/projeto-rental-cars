@@ -47,8 +47,9 @@ public abstract class MenuAdm {
         System.out.println("1. Adicionar");
         System.out.println("2. Editar");
         System.out.println("3. Buscar");
-        System.out.println("4. Remover");
-        System.out.println("5. Listar");
-        System.out.println("6. Voltar ao menu anterior");
+        System.out.println("4. Buscar por parte do nome");
+        System.out.println("5. Remover");
+        System.out.println("6. Listar");
+        System.out.println("7. Voltar ao menu anterior");
     }
 }
