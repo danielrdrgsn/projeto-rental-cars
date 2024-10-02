@@ -16,20 +16,16 @@ public abstract class MenuPrincipal {
         boolean ativo = true;
 
         while (ativo) {
-            System.out.println("Bem vind@! Identifique-se: ");
-            System.out.println("1. Administrador/Operador do Sistema");
-            System.out.println("2. Cliente");
-            System.out.println("0. Sair");
+            exibirMenuPrincipal();
 
             int opcao;
-
             try {
                 opcao = input.nextInt();
                 input.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println(ConsoleColors.RED_BOLD + "Opção inválida. Apenas valores numéricos são aceitos." + ConsoleColors.RESET);
-                ativo = false;
-                opcao = 0;
+                input.nextLine();
+                continue;
             }
 
             switch (opcao) {
@@ -39,9 +35,21 @@ public abstract class MenuPrincipal {
                     System.out.println(ConsoleColors.CYAN_BOLD + "Saindo..." + ConsoleColors.RESET);
                     ativo = false;
                 }
-                default -> System.out.println("Opção inválida.");
+                default -> System.out.println("Opção inválida. Tente novamente.");
             }
         }
+    }
+
+    private static void exibirMenuPrincipal() {
+        System.out.println("==============================================");
+        System.out.println("|                Bem vindo!                  |");
+        System.out.println("|            Identifique-se:                 |");
+        System.out.println("==============================================");
+        System.out.println("| 01 - Administrador/Operador do Sistema     |");
+        System.out.println("| 02 - Cliente                               |");
+        System.out.println("| 00 - Sair                                  |");
+        System.out.println("==============================================");
+        System.out.print("Opção escolhida: ");
     }
 
     public static void fecharScanner() {

@@ -18,7 +18,7 @@ public abstract class MenuCliente {
         boolean ativo = true;
 
         while (ativo) {
-            System.out.println("Digite seu email de cliente: ");
+            System.out.print("Digite seu email de cliente: ");
             String email = input.nextLine();
 
             Usuario usuario = usuarioRepository.buscar(email);
@@ -27,27 +27,23 @@ public abstract class MenuCliente {
                 return;
             }
 
-            int opcao;
-            System.out.println("Cliente - Auto-Atendimento:");
-            System.out.println("1. Alugar");
-            System.out.println("2. Devolver");
-            System.out.println("3. Mostrar extrato de aluguéis");
-            System.out.println("4. Voltar");
+            exibirMenuCliente();
 
+            int opcao;
             try {
                 opcao = input.nextInt();
                 input.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println(ConsoleColors.RED_BOLD + "Opção inválida. Apenas valores numéricos são aceitos." + ConsoleColors.RESET);
-                ativo = false;
-                opcao = 4;
+                input.nextLine();
+                continue;
             }
 
             switch (opcao) {
                 case 1 -> alugarVeiculo(input, usuario);
                 case 2 -> devolverVeiculo(input, usuario);
                 case 3 -> {
-                    mostrarComprovanteDevolucoes(input, ((Cliente) usuario));
+                    mostrarComprovanteDevolucoes(input, (Cliente) usuario);
                     ativo = false;
                 }
                 case 4 -> ativo = false;
@@ -56,4 +52,15 @@ public abstract class MenuCliente {
         }
     }
 
+    private static void exibirMenuCliente() {
+        System.out.println("==============================================");
+        System.out.println("|         Cliente - Auto-Atendimento         |");
+        System.out.println("==============================================");
+        System.out.println("| 01 - Alugar                                |");
+        System.out.println("| 02 - Devolver                              |");
+        System.out.println("| 03 - Mostrar extrato de aluguéis           |");
+        System.out.println("| 04 - Voltar                                |");
+        System.out.println("==============================================");
+        System.out.print("Opção escolhida: ");
+    }
 }
