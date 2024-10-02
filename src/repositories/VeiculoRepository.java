@@ -23,18 +23,16 @@ public class VeiculoRepository implements Repositorio<Veiculo, String> {
     }
 
     @Override
-    public void editar(Veiculo veiculo, String placa) {
+    public void editar(Veiculo veiculo, String placaAntiga) {
         try {
-            Veiculo antigo = buscar(placa);
-            int index = Locadora.getVeiculos().indexOf(antigo);
-            if (index != -1) {
-                Veiculo editado = Locadora.getVeiculos().get(index);
-                editado.setPlaca(placa);
-                editado.setCor(veiculo.getCor());
+            Veiculo antigo = buscar(placaAntiga);
+            if (antigo != null) {
+                antigo.setPlaca(veiculo.getPlaca());
+                antigo.setCor(veiculo.getCor());
                 LocadoraUtils.salvarDadosLocadora();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro ao salvar dados da locadora: " + e.getMessage(), e);
         }
     }
 

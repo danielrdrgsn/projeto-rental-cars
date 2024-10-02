@@ -9,6 +9,7 @@ import repositories.VeiculoRepository;
 import utils.ConsoleColors;
 
 import java.util.Collections;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,90 +19,199 @@ public class VeiculoService {
 
     public static void adicionar(Scanner input) {
 
-        System.out.println("Digite o tipo de veículo que deseja cadastrar: ");
-        System.out.println("1. Carro");
-        System.out.println("2. Moto");
-        System.out.println("3. Caminhão");
-        System.out.println("4. Voltar");
+        try {
+            int opcao = mostrarMenuAdicaoVeiculo(input);
+            if (opcao == 4) {
+                System.out.println("Operação cancelada.");
+                return;
+            }
 
-        int opcao = input.nextInt();
-        input.nextLine();
+            String placa = solicitarPlacaValida(input);
+            String modeloVeiculo = solicitarModelo(input);
+            int anoFabricacao = solicitarAnoFabricacao(input);
+            String corVeiculo = solicitarCor(input);
+            System.out.println("Digite o código da agência de origem do veículo: ");
+            Integer codigoAgencia = solicitarCodigoAgenciaValido(input);
 
-        System.out.println("Digite a placa do veículo:");
-        String placa = input.nextLine();
-        Veiculo veiculo = veiculoRepository.buscar(placa);
+            Integer idVeiculo = obterUltimoIdVeiculo() + 1;
 
-        while (veiculo != null) {
-            System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nPlaca já utilizada por outro veículo.\n" + ConsoleColors.RESET);
-            System.out.println("Digite uma nova placa:");
-            placa = input.nextLine();
+            Veiculo novoVeiculo = criarVeiculo(idVeiculo, opcao, placa, modeloVeiculo, anoFabricacao, corVeiculo, codigoAgencia);
+            veiculoRepository.adicionar(novoVeiculo);
+
+            System.out.println(novoVeiculo.getClass().getSimpleName() + " adicionado com sucesso.");
+        } catch (InputMismatchException e) {
+            System.out.println("Entrada inválida. Certifique-se de inserir os dados corretamente.");
+            input.nextLine();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static Veiculo criarVeiculo(Integer idVeiculo, int opcao, String placa, String modeloVeiculo, int anoFabricacao, String corVeiculo, Integer codigoAgencia) {
+        return switch (opcao) {
+            case 1 -> new Carro(idVeiculo, placa, modeloVeiculo, anoFabricacao, corVeiculo, true, codigoAgencia);
+            case 2 -> new Moto(idVeiculo, placa, modeloVeiculo, anoFabricacao, corVeiculo, true, codigoAgencia);
+            case 3 -> new Caminhao(idVeiculo, placa, modeloVeiculo, anoFabricacao, corVeiculo, true, codigoAgencia);
+            default -> throw new IllegalArgumentException("Tipo de veículo desconhecido.");
+        };
+    }
+
+    private static int mostrarMenuAdicaoVeiculo(Scanner input) {
+        int opcao = 0;
+        boolean inputValido = false;
+
+        while (!inputValido) {
+            try {
+                System.out.println("Digite o tipo de veículo que deseja cadastrar: ");
+                System.out.println("1. Carro");
+                System.out.println("2. Moto");
+                System.out.println("3. Caminhão");
+                System.out.println("4. Voltar");
+
+                opcao = input.nextInt();
+                input.nextLine();
+
+                if (opcao >= 1 && opcao <= 4) {
+                    inputValido = true;
+                } else {
+                    System.out.println("Opção inválida. Digite um número entre 1 e 4.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Digite um número.");
+                input.nextLine();
+            }
+        }
+        return opcao;
+    }
+
+    private static String solicitarPlacaValida(Scanner input) {
+        String placa;
+        Veiculo veiculo;
+
+        do {
+            System.out.println("Digite a placa do veículo:");
+            placa = input.nextLine().trim();
+
             veiculo = veiculoRepository.buscar(placa);
+            if (veiculo != null) {
+                System.out.println("Placa já utilizada por outro veículo. Tente novamente.");
+            }
+        } while (veiculo != null);
+
+        return placa;
+    }
+
+    private static String solicitarModelo(Scanner input) {
+        System.out.println("Digite o modelo do veículo:");
+        return input.nextLine().trim();
+    }
+
+    private static int solicitarAnoFabricacao(Scanner input) {
+        int anoFabricacao = 0;
+        boolean inputValido = false;
+
+        while (!inputValido) {
+            try {
+                System.out.println("Digite o ano de fabricação do veículo:");
+                anoFabricacao = input.nextInt();
+                input.nextLine();
+
+                if (anoFabricacao <= java.time.Year.now().getValue()) {
+                    inputValido = true;
+                } else {
+                    System.out.println("Ano de fabricação inválido.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Digite um ano válido.");
+                input.nextLine();
+            }
         }
+        return anoFabricacao;
+    }
 
-        System.out.println("Digite o modelo do veiculo: ");
-        String modeloVeiculo = input.nextLine();
+    private static String solicitarCor(Scanner input) {
+        System.out.println("Digite a cor do veículo:");
+        return input.nextLine().trim();
+    }
 
-        System.out.println("Digite o ano de fabricação do veiculo: ");
-        int anoFabricacao = input.nextInt();
-        input.nextLine();
+    private static Integer solicitarCodigoAgenciaValido(Scanner input) {
+        Integer codigoAgencia = null;
+        boolean inputValido = false;
 
-        System.out.println("Digite a cor do veiculo: ");
-        String corVeiculo = input.nextLine();
+        while (!inputValido) {
+            try {
+                System.out.println("Digite o código da agência de origem do veículo:");
+                codigoAgencia = input.nextInt();
+                input.nextLine();
 
-        System.out.println("Digite o código da agência de origem do veículo: ");
-        Integer codigoAgencia = input.nextInt(); // TODO: validar agencia escolhida
-        input.nextLine();
-
-        Integer idVeiculo = obterUltimoIdVeiculo() + 1;
-
-        switch (opcao) {
-            case 1 -> {
-                veiculoRepository.adicionar(new Carro(idVeiculo, placa, modeloVeiculo, anoFabricacao, corVeiculo, true, codigoAgencia));
-                System.out.println("Carro cadastrado com sucesso!");
+                if (AgenciaService.buscarAgencia(codigoAgencia) != null) {
+                    inputValido = true;
+                } else {
+                    System.out.println("Código de agência inválido. Tente novamente.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada inválida. Digite um número.");
+                input.nextLine();
             }
-            case 2 -> {
-                veiculoRepository.adicionar(new Moto(idVeiculo, placa, modeloVeiculo, anoFabricacao, corVeiculo, true, codigoAgencia));
-                System.out.println("Moto cadastrada com sucesso!");
-            }
-            case 3 -> {
-                veiculoRepository.adicionar(new Caminhao(idVeiculo, placa, modeloVeiculo, anoFabricacao, corVeiculo, true, codigoAgencia));
-                System.out.println("Caminhão cadastrado com sucesso!");
-            }
-            default -> System.out.println("Tipo de veículo desconhecido.");
         }
+        return codigoAgencia;
     }
 
     public static void editar(Scanner input) {
-        System.out.println("Digite a placa atual do veículo:");
-        String placaAtual = input.nextLine();
-        Veiculo veiculo = veiculoRepository.buscar(placaAtual);
+        try {
+            System.out.println("Digite a placa atual do veículo:");
+            String placaAtual = input.nextLine().trim();
 
-        if (veiculo == null) {
-            System.out.println(ConsoleColors.CYAN_BOLD_BRIGHT + "\nVeículo não encontrado.\n" + ConsoleColors.RESET);
-            return;
+            Veiculo veiculo = veiculoRepository.buscar(placaAtual);
+            if (veiculo == null) {
+                System.out.println("Veículo não encontrado.");
+                return;
+            }
+
+            String novaPlaca = solicitarNovaPlaca(input, placaAtual);
+            String novaCor = solicitarNovaCor(input, veiculo.getCor());
+
+            veiculo.setPlaca(novaPlaca.isEmpty() ? placaAtual : novaPlaca);
+            veiculo.setCor(novaCor.isEmpty() ? veiculo.getCor() : novaCor);
+
+            veiculoRepository.editar(veiculo, placaAtual);
+            System.out.println("Veículo editado com sucesso!");
+
+        } catch (InputMismatchException e) {
+            System.out.println("Entrada inválida. Verifique os dados inseridos.");
+            input.nextLine();
         }
-
-        System.out.println("Digite a nova placa para o veículo ou tecle <ENTER> para manter a mesma: ");
-        String novaPlaca = input.nextLine();
-
-        Veiculo veiculoExistente = veiculoRepository.buscar(novaPlaca);
-        while (veiculoExistente != null && !veiculoExistente.getPlaca().equals(placaAtual)) {
-            System.out.println("Placa já utilizada por outro veículo.");
-            System.out.println("Digite a nova placa para o veículo ou tecle <ENTER> para manter a mesma: ");
-            novaPlaca = input.nextLine();
-            veiculoExistente = veiculoRepository.buscar(novaPlaca);
-        }
-        veiculo.setPlaca(novaPlaca.isEmpty() ? placaAtual : novaPlaca);
-
-        System.out.println("Digite a nova cor ou tecle <ENTER> para manter a mesma: ");
-        String novaCor = input.nextLine();
-        veiculo.setCor(novaCor.isEmpty() ? veiculo.getCor() : novaCor);
-
-        veiculoRepository.editar(veiculo, placaAtual);
-        System.out.println("Veículo editado com sucesso!");
     }
 
-    public void alteraDisponibilidade(Veiculo veiculo) {
+    private static String solicitarNovaPlaca(Scanner input, String placaAtual) {
+        String novaPlaca;
+        Veiculo veiculoExistente;
+
+        do {
+            System.out.println("Digite a nova placa para o veículo ou tecle <ENTER> para manter a mesma:");
+            novaPlaca = input.nextLine().trim();
+
+            if (novaPlaca.isEmpty()) {
+                return placaAtual;
+            }
+
+            veiculoExistente = veiculoRepository.buscar(novaPlaca);
+            if (veiculoExistente != null && !veiculoExistente.getPlaca().equals(placaAtual)) {
+                System.out.println("Placa já utilizada por outro veículo.");
+            }
+        } while (veiculoExistente != null && !veiculoExistente.getPlaca().equals(placaAtual));
+
+        return novaPlaca;
+    }
+
+    private static String solicitarNovaCor(Scanner input, String corAtual) {
+        System.out.println("Digite a nova cor ou tecle <ENTER> para manter a mesma:");
+        String novaCor = input.nextLine().trim();
+
+        return novaCor.isEmpty() ? corAtual : novaCor;
+    }
+
+    public static void alteraDisponibilidade(Veiculo veiculo) {
         veiculo.setDisponivel(!veiculo.isDisponivel());
     }
 

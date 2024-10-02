@@ -42,18 +42,6 @@ public abstract class Veiculo implements Comparable<Veiculo> {
         return modelo;
     }
 
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-
-    public int getAnoFabricacao() {
-        return anoFabricacao;
-    }
-
-    public void setAnoFabricacao(int anoFabricacao) {
-        this.anoFabricacao = anoFabricacao;
-    }
-
     public String getCor() {
         return cor;
     }

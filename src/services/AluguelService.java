@@ -33,7 +33,7 @@ public class AluguelService {
         Integer idVeiculo = input.nextInt();
         input.nextLine();
         Veiculo escolhido = buscarVeiculo(idVeiculo); // TODO: validar escolha
-        escolhido.setDisponivel(false);
+        VeiculoService.alteraDisponibilidade(escolhido);
 
         Agencia localRetirada = AgenciaService.buscarAgencia(escolhido.getCodAgenciaAtual());
         System.out.println("Digite o código da agência de devolução: "); // TODO: validar agência
