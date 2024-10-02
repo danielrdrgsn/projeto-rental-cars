@@ -31,11 +31,11 @@ public class AluguelService {
 
         Integer idVeiculo = null;
 
-        while (idVeiculo == null){
+        while (idVeiculo == null) {
             System.out.println("ID escolhido: ");
-            if(input.hasNextInt()){
+            if (input.hasNextInt()) {
                 idVeiculo = input.nextInt();
-            }else{
+            } else {
                 System.out.println("Apenas números inteiros são válidos para o ID do veículo.");
                 input.nextLine();
             }
@@ -43,12 +43,12 @@ public class AluguelService {
         input.nextLine();
 
         Veiculo escolhido = buscarVeiculo(idVeiculo);
-        if(escolhido == null){
+        if (escolhido == null) {
             System.out.println("O veículo não foi encontrado, tente novamente!");
             return;
         }
 
-        if(!escolhido.isDisponivel()){
+        if (!escolhido.isDisponivel()) {
             System.out.println("O veículo já está alugado. Tente novamente com outro veículo!");
             return;
         }
@@ -56,11 +56,11 @@ public class AluguelService {
         Agencia localRetirada = AgenciaService.buscarAgencia(escolhido.getCodAgenciaAtual());
 
         Integer codAgenciaDevolucao = null;
-        while (codAgenciaDevolucao == null){
+        while (codAgenciaDevolucao == null) {
             System.out.println("Digite o código da agência de devolução: ");
-            if(input.hasNextInt()){
+            if (input.hasNextInt()) {
                 codAgenciaDevolucao = input.nextInt();
-            }else{
+            } else {
                 System.out.println("Apenas números inteiros são válidos para agência.");
                 input.nextLine();
             }
@@ -69,20 +69,19 @@ public class AluguelService {
         input.nextLine();
 
         Agencia localDevolucao = AgenciaService.buscarAgencia(codAgenciaDevolucao);
-        if(localDevolucao == null){
+        if (localDevolucao == null) {
             System.out.println("A agência de devolução não foi encontrada, tente novamente!");
             return;
         }
 
-
-        System.out.println("Digite a data e hora de devolução no formato <dd/MM/yyyy>:");
+        System.out.println("Digite a data de devolução no formato <dd/MM/yyyy>:");
         LocalDateTime dataDevolucao;
 
-        try{
+        try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
             dataDevolucao = LocalDateTime.parse(input.nextLine() + " 00:00:00", formatter);
 
-            if(dataDevolucao.isBefore(LocalDateTime.now())){
+            if (dataDevolucao.isBefore(LocalDateTime.now())) {
                 System.out.println("A data de devolução não pode ser anterior a data atual.");
                 return;
             }
@@ -91,11 +90,10 @@ public class AluguelService {
             return;
         }
 
-
         Integer novoIdAluguel = obterUltimoIdAluguel() + 1;
 
         Aluguel novoAluguel = new Aluguel(novoIdAluguel, cliente, escolhido, LocalDateTime.now(),
-                                    dataDevolucao, localRetirada, localDevolucao, BigDecimal.ZERO);
+                dataDevolucao, localRetirada, localDevolucao, BigDecimal.ZERO);
         novoAluguel.setValorAluguel(novoAluguel.calcularValorTotal());
 
         escolhido.setDisponivel(false);
@@ -113,16 +111,16 @@ public class AluguelService {
         Veiculo devolvido = buscarVeiculo(placa);
 
 
-        if(devolvido.isDisponivel()){
+        if (devolvido.isDisponivel()) {
             System.out.println("Não é possível devolver um veículo que não foi alugado!");
             return;
         }
-        if(devolvido == null) {
+        if (devolvido == null) {
             System.out.println("Veículo não encontrado.");
         } else {
             List<Aluguel> alugueis = aluguelRepository.buscarPorCliente(cliente);
-            for(Aluguel aluguel : alugueis) {
-                if(aluguel.getCliente().equals(cliente)) {
+            for (Aluguel aluguel : alugueis) {
+                if (aluguel.getCliente().equals(cliente)) {
                     devolvido.setDisponivel(true);
                     System.out.println(gerarExtratoDetalhado(aluguel));
                     break;
@@ -134,8 +132,8 @@ public class AluguelService {
 
     private static Integer obterUltimoIdAluguel() {
         Integer ultimoId = -1;
-        for(Aluguel a: Locadora.getAlugueis()) {
-            if(a.getId() > ultimoId) {
+        for (Aluguel a : Locadora.getAlugueis()) {
+            if (a.getId() > ultimoId) {
                 ultimoId = a.getId();
             }
         }
@@ -176,21 +174,9 @@ public class AluguelService {
         }
     }
 
-    public List<Aluguel> listarAlugueis() {
-        return aluguelRepository.buscarTodos();
-    }
-
-    public static void buscarAlugueisPorCliente(Cliente cliente) {
-        List<Aluguel> alugueis = aluguelRepository.buscarPorCliente(cliente);
-    }
-
-    public List<Aluguel> buscarAlugueisPorVeiculo(Veiculo veiculo) {
-        return aluguelRepository.buscarPorVeiculo(veiculo);
-    }
-
     public static void mostrarComprovanteDevolucoes(Scanner input, Cliente cliente) {
         List<Aluguel> alugueis = aluguelRepository.buscarPorCliente(cliente);
-        if(alugueis.isEmpty()) {
+        if (alugueis.isEmpty()) {
             System.out.println("Não há aluguéis para mostrar.");
         } else {
             for (Aluguel aluguel : alugueis) {

@@ -30,7 +30,6 @@ public class VeiculoService {
             String modeloVeiculo = solicitarModelo(input);
             int anoFabricacao = solicitarAnoFabricacao(input);
             String corVeiculo = solicitarCor(input);
-            System.out.println("Digite o código da agência de origem do veículo: ");
             Integer codigoAgencia = solicitarCodigoAgenciaValido(input);
 
             Integer idVeiculo = obterUltimoIdVeiculo() + 1;
