@@ -22,6 +22,7 @@ public class AgenciaRepository implements Repositorio<Agencia, Integer> {
         }
     }
 
+
     @Override
     public void editar(Agencia agencia, Integer codAgencia) {
         try {
