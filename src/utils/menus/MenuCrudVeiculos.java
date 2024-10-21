@@ -22,8 +22,7 @@ public class MenuCrudVeiculos {
                 input.nextLine();
             } catch (InputMismatchException e) {
                 System.out.println(ConsoleColors.RED_BOLD + "Opção inválida. Apenas valores numéricos são aceitos." + ConsoleColors.RESET);
-                ativo = false;
-                opcao = 6;
+                break;
             }
 
             switch (opcao) {

@@ -186,9 +186,9 @@ public class Aluguel {
         BigDecimal valorAluguel = NumberFormatter.valorStringToBigDecimal(partes[7]);
 
         Cliente cliente = UsuarioService.buscarCliente(emailCliente);
-        Veiculo veiculo = VeiculoService.buscarVeiculo(placaVeiculo);
-        Agencia agenciaRetirada = AgenciaService.buscarAgencia(codigoLocalRetirada);
-        Agencia agenciaDevolucao = AgenciaService.buscarAgencia(codigoLocalDevolucao);
+        Veiculo veiculo = VeiculoService.buscarVeiculo(placaVeiculo).get();
+        Agencia agenciaRetirada = AgenciaService.buscarAgencia(codigoLocalRetirada).get();
+        Agencia agenciaDevolucao = AgenciaService.buscarAgencia(codigoLocalDevolucao).get();
 
         return new Aluguel(id, cliente, veiculo, dataRetirada, dataDevolucao, agenciaRetirada, agenciaDevolucao, valorAluguel);
     }

@@ -1,8 +1,7 @@
 package utils.menus;
 
-import entities.agencia.Agencia;
-import services.AgenciaService;
 import utils.ConsoleColors;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 

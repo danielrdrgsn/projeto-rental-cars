@@ -5,97 +5,78 @@ import entities.veiculo.Veiculo;
 import utils.persistencia.LocadoraUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class VeiculoRepository implements Repositorio<Veiculo, String> {
 
     @Override
     public void adicionar(Veiculo veiculo) {
         Locadora.getVeiculos().add(veiculo);
-        try {
-            LocadoraUtils.salvarDadosLocadora();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        salvarDados();
     }
 
     @Override
     public void editar(Veiculo veiculo, String placaAntiga) {
-        try {
-            Veiculo antigo = buscar(placaAntiga);
-            if (antigo != null) {
-                antigo.setPlaca(veiculo.getPlaca());
-                antigo.setCor(veiculo.getCor());
-                LocadoraUtils.salvarDadosLocadora();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar dados da locadora: " + e.getMessage(), e);
-        }
+        buscar(placaAntiga).ifPresentOrElse(antigo -> {
+            antigo.setPlaca(veiculo.getPlaca());
+            antigo.setCor(veiculo.getCor());
+            salvarDados();
+        }, () -> {
+            throw new NoSuchElementException("Veículo com placa " + placaAntiga + " não encontrado.");
+        });
     }
 
     @Override
-    public Veiculo buscar(String placa) {
-        List<Veiculo> veiculos = Locadora.getVeiculos();
-        for (Veiculo v : veiculos) {
-            if (v.getPlaca().equals(placa)) {
-                return v;
-            }
-        }
-        return null;
+    public Optional<Veiculo> buscar(String placa) {
+        return Locadora.getVeiculos().stream()
+                .filter(v -> v.getPlaca().equals(placa))
+                .findFirst();
     }
 
+    @Override
     public Veiculo remover(Veiculo veiculo) {
-        try {
-            int index = Locadora.getVeiculos().indexOf(veiculo);
-            if (index != -1) {
-                Veiculo removido = Locadora.getVeiculos().remove(index);
-                LocadoraUtils.salvarDadosLocadora();
-                return removido;
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (Locadora.getVeiculos().remove(veiculo)) {
+            salvarDados();
+            return veiculo;
         }
         return null;
     }
 
     public List<Veiculo> buscarPorModelo(String modelo) {
-        List<Veiculo> veiculos = Locadora.getVeiculos();
-        List<Veiculo> resultado = new ArrayList<>();
-        for (Veiculo v : veiculos) {
-            if(v.getModelo().contains(modelo)) {
-                resultado.add(v);
-            }
-        }
-        return resultado;
+        return Locadora.getVeiculos().stream()
+                .filter(v -> v.getModelo().contains(modelo))
+                .collect(Collectors.toList());
     }
 
+    @Override
     public List<Veiculo> listar() {
-        List<Veiculo> veiculos = Locadora.getVeiculos();
-        Collections.sort(veiculos);
-        return veiculos;
+        return Locadora.getVeiculos().stream()
+                .sorted()
+                .collect(Collectors.toList());
     }
 
-    public Veiculo buscarPorId(Integer codigo) {
-        List<Veiculo> veiculos = Locadora.getVeiculos();
-        for (Veiculo v : veiculos) {
-            if (Objects.equals(v.getId(), codigo)) {
-                return v;
-            }
-        }
-        return null;
+    public Optional<Veiculo> buscarPorId(Integer codigo) {
+        return Locadora.getVeiculos().stream()
+                .filter(v -> Objects.equals(v.getId(), codigo))
+                .findFirst();
     }
 
-    public List<Veiculo> bucarVeiculosDisponiveis() {
-        List<Veiculo> resultado = new ArrayList<>();
-        for(Veiculo v:Locadora.getVeiculos()) {
-            if(v.isDisponivel()) {
-                resultado.add(v);
-            }
+    public List<Veiculo> buscarVeiculosDisponiveis() {
+        return Locadora.getVeiculos().stream()
+                .filter(Veiculo::isDisponivel)
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    private void salvarDados() {
+        try {
+            LocadoraUtils.salvarDadosLocadora();
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar dados da locadora.", e);
         }
-        Collections.sort(resultado);
-        return resultado;
     }
 }
