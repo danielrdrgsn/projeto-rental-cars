@@ -7,8 +7,14 @@ import entities.usuario.Usuario;
 import entities.veiculo.Veiculo;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class LocadoraUtils {
 
@@ -27,53 +33,42 @@ public abstract class LocadoraUtils {
     }
 
     private static <T> void salvarDadosEmArquivo(List<T> lista, String arquivo) throws IOException {
-
         verificaBancoDeDados(arquivo);
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(arquivo))) {
-            for (T item : lista) {
-                writer.write(item.toString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        List<String> linhas = lista.stream()
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+        Files.write(Paths.get(arquivo), linhas, StandardCharsets.UTF_8,
+                StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     private static <T> List<T> carregarListaDeArquivo(String arquivo, Class<T> classe) throws IOException {
-
         verificaBancoDeDados(arquivo);
 
-        List<T> lista = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
-            String linha;
-            while ((linha = reader.readLine()) != null) {
-                lista.add(converterLinhaParaObjeto(linha, classe));
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-        return lista;
+        return Files.lines(Paths.get(arquivo), StandardCharsets.UTF_8)
+                .map(linha -> converterLinhaParaObjeto(linha, classe))
+                .collect(Collectors.toList());
     }
 
     private static <T> T converterLinhaParaObjeto(String linha, Class<T> classe) {
-        if(classe.equals(Usuario.class)) {
+        if (classe.equals(Usuario.class)) {
             return classe.cast(Usuario.fromString(linha));
-        } else if(classe.equals(Agencia.class)) {
+        } else if (classe.equals(Agencia.class)) {
             return classe.cast(Agencia.fromString(linha));
-        } else if(classe.equals(Veiculo.class)) {
+        } else if (classe.equals(Veiculo.class)) {
             return classe.cast(Veiculo.fromString(linha));
-        } else if(classe.equals(Aluguel.class)) {
+        } else if (classe.equals(Aluguel.class)) {
             return classe.cast(Aluguel.fromString(linha));
         } else {
-            throw new IllegalArgumentException("Tipo desconhecido para conversão" + classe.getName());
+            throw new IllegalArgumentException("Tipo desconhecido para conversão: " + classe.getName());
         }
     }
 
     private static void verificaBancoDeDados(String arquivo) throws IOException {
-        File arquivoBD = new File(arquivo);
-        if(!arquivoBD.exists()) {
-            arquivoBD.createNewFile();
+        Path path = Paths.get(arquivo);
+        if (Files.notExists(path)) {
+            Files.createFile(path);
         }
     }
 }
